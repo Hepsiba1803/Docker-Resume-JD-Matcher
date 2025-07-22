@@ -2,7 +2,7 @@
 FROM python:3.11.9-slim
 
 # Set up working directory (matches your FastAPI app folder structure)
-WORKDIR /app/backend/app
+WORKDIR /app
 
 # Install necessary system packages (for PDF parsing/processing)
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -21,4 +21,4 @@ COPY . /app
 EXPOSE 8000
 
 # Start the FastAPI app, specifying correct module and instance (main:web_app)
-CMD ["uvicorn", "main:web_app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.app.main:web_app", "--host", "0.0.0.0", "--port", "8000"]
