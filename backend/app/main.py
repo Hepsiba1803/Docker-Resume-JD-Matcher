@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from .routes import match_report  # make sure this import works
+import os
 
 print("Starting the Resume-JD Matcher API...")
 
@@ -26,12 +27,17 @@ web_app.include_router(match_report.router, prefix="/api", tags=["Match Report"]
 # Serve frontend
 web_app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
 
-# Serve the main frontend page at root
-@web_app.get("/")
-async def serve_frontend():
-    return FileResponse("frontend/simpleui.html")
 
 @web_app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@web_app.get("/")
+async def serve_frontend():
+    path = "frontend/simpleui.html"
+    if os.path.exists(path):
+        return FileResponse(path)
+    else:
+        return {"error": "simpleui.html not found."}
+
 
