@@ -1,3 +1,14 @@
+---
+title: ResumeJD Matcher
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+sdk: docker
+pinned: false
+app_file: backend/main.py  # optional; not used for docker execution
+---
+
+A Docker-based Hugging Face Space serving a custom frontend and FastAPI backend.
 
 # 🚀 Resume-JD Matcher
 
