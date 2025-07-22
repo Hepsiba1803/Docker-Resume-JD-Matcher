@@ -20,3 +20,9 @@ env/
 
 # macOS junk files
 .DS_Store
+
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
