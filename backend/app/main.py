@@ -19,3 +19,13 @@ web_app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Mount frontend's built files
+web_app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="frontend")
+
+# Optional: serve index.html at root if you want frontend as default landing page
+@web_app.get("/")
+async def serve_frontend():
+    return FileResponse("frontend/simpleui.html")
