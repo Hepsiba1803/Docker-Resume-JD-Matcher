@@ -21,4 +21,4 @@ COPY . /app
 EXPOSE 8000
 
 # Start the FastAPI app, specifying correct module and instance (main:web_app)
-CMD ["uvicorn", "backend.app.main:web_app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "backend.app.main:web_app", "--host", "0.0.0.0", "--port", "8000", "--lifespan", "off"]
