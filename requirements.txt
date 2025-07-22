@@ -1,5 +1,4 @@
 annotated-types==0.7.0
-streamlit
 anyio==4.9.0
 catalogue==2.0.10
 certifi==2025.6.15

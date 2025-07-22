@@ -1,15 +1,3 @@
----
-title: Resume JD Matcher
-emoji: 📄
-colorFrom: indigo
-colorTo: blue
-sdk: streamlit
-sdk_version: "1.29.0"
-app_file: streamlit_app.py
-pinned: false
-license: mit
-short_description: Tune your resume to job description
----
 
 # 🚀 Resume-JD Matcher
 
