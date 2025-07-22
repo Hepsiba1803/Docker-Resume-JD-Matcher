@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routes import match_report
+from backend.app.routes import match_report
 from fastapi.middleware.cors import CORSMiddleware
 
 print("Starting the Resume-JD Matcher API...")
