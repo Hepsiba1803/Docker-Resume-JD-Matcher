@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy Python dependencies separately to leverage Docker cache
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
+COPY local_models /app/local_models
+RUN python -m spacy download en_core_web_sm
 
 # Copy the rest of your application code (including backend and frontend)
 COPY . /app
