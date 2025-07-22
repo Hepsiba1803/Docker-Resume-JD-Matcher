@@ -30,3 +30,8 @@ web_app.mount("/frontend", StaticFiles(directory="frontend", html=True), name="f
 @web_app.get("/")
 async def serve_frontend():
     return FileResponse("frontend/simpleui.html")
+
+@web_app.get("/health")
+async def health():
+    return {"status": "ok"}
+
