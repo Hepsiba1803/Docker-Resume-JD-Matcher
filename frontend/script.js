@@ -63,7 +63,8 @@ document.getElementById('uploadForm').onsubmit = async function (e) {
   formData.append('job_description', jdFile);
 
   try {
-    const response = await fetch('http://localhost:8000/api/match-files', {
+    const response = await fetch('/api/match-files', {
+    {
       method: 'POST',
       body: formData
     });
