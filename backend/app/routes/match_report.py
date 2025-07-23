@@ -38,6 +38,7 @@ async def create_match_analysis(
     content_quality_score, content_quality_feedback = content_quality_points.content_quality_score_and_suggestions(resume_text)
 
     # formatting score and feedback
+    resume.file.seek(0)
     formatting_score, formatting_feedback = formatting_points.formatting_score_and_suggestions(resume)
 
     # context or relevance score and feedback
