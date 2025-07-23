@@ -15,10 +15,11 @@ nlp = spacy.load('en_core_web_sm')
 
 # Lightweight model for KeyBERT - better for limited memory (Render 512MB)
 @lru_cache(maxsize=1)
+
 def get_kw_model():
-    cache_dir = "./models_cache"  # Create this folder in your repo
-    os.makedirs(cache_dir, exist_ok=True)
-    return KeyBERT(SentenceTransformer("all-MiniLM-L6-v2", cache_folder=cache_dir))
+    local_model_path = "local_models/intfloat-e5-small-v2"
+    model = SentenceTransformer(local_model_path)
+    return KeyBERT(model)
 
 # Load skill set from CSV into a set
 def load_skill_set(csv_path):
