@@ -64,7 +64,6 @@ document.getElementById('uploadForm').onsubmit = async function (e) {
 
   try {
     const response = await fetch('/api/match-files', {
-    {
       method: 'POST',
       body: formData
     });
