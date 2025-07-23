@@ -63,8 +63,6 @@ def extract_relevant_skills_and_keywords(text, top_n=500) -> set[str]:
             all_keywords.add(kw.lower())
         else:
             missing_keywords.add(kw.lower())
-
-    print("count:", len(all_keywords))
     return all_keywords
 
 def load_skill_set_to_dict(csv_path) -> dict:
