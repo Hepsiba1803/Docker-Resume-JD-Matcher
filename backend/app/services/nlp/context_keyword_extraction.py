@@ -14,7 +14,7 @@ nlp = spacy.load('en_core_web_sm')
 # Lightweight model for KeyBERT - better for limited memory (Render 512MB)
 @lru_cache(maxsize=1)
 def get_kw_model():
-    return KeyBERT('paraphrase-MiniLM-L3-v2')
+    return KeyBERT('all-MiniLM-L6-v2')
 
 # Load skill set from CSV into a set
 def load_skill_set(csv_path):
