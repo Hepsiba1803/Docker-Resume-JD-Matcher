@@ -38,7 +38,6 @@ async def create_match_analysis(
     content_quality_score, content_quality_feedback = content_quality_points.content_quality_score_and_suggestions(resume_text)
 
     # formatting score and feedback
-    resume.file.seek(0)
     formatting_score, formatting_feedback = formatting_points.formatting_score_and_suggestions(resume)
 
     # context or relevance score and feedback
@@ -49,19 +48,18 @@ async def create_match_analysis(
     overall_feedback = "Resume are considered ATS-friendly if the score is greater than 80"
 
     result =[
-        {
+        "total":{
             "type": "Total ATS score",
             "score": overall_score,
             "suggestions" : overall_feedback
         },
-
-        { 
+        "missingkeywords":{ 
             "type":"keyword match",
             "score": keyword_score,
             "missing_keywords": missing_keywords,
             "suggestions": keyword_feedback
         },
-        { 
+        "sections":{ 
             "type":"standard section match",
             "score": section_score,
             "suggestions": section_feedback
@@ -73,13 +71,12 @@ async def create_match_analysis(
             "suggestions": formatting_feedback
 
         },
-        { 
+        "content quality":{ 
             "type":"content quality",
             "score": content_quality_score,
             "suggestions": content_quality_feedback
-
         },
-        { 
+        "context":{ 
             "type":"context or relevance",
             "score": context_score,
             "suggestions": context_feedback
