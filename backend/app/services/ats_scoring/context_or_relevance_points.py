@@ -74,12 +74,42 @@ def keyword_context_points(sections: dict, jd_keywords: list, max_points=10) -> 
     score = max_points * (0.7 * context_score + 0.3 * skills_score)
 
     # Feedback
-    feedback = []
-    if found_in_skills:
-        feedback.append(f"Some skills ({', '.join(sorted(found_in_skills))}) are only listed in Skills. Add them to Experience/Projects for more impact.")
-    if found_in_context:
-        feedback.append(f"Great! You have contextualized these key skills: {', '.join(sorted(found_in_context))}.")
-    if not found_in_context and not found_in_skills:
-        feedback.append("No relevant skills from the job description found. Tailor your resume more closely to the JD.")
-    return score, feedback
+    short_feedback=[]
+    detailed_feedback =[]
+    # SHORT FEEDBACK — show in UI panel directly (snappy + clear)
 
+if found_in_skills:
+    short_feedback.append(
+        f"Move skills like `{', '.join(sorted(list(found_in_skills)[:3]))}` from Skills to Experience or Projects to show real-world use."
+    )
+
+if found_in_context:
+    short_feedback.append(
+        f"Nice! You’ve highlighted `{', '.join(sorted(list(found_in_context)[:3]))}` in real-world sections like Experience."
+    )
+
+if not found_in_context and not found_in_skills:
+    short_feedback.append(
+        f"Missing important keywords like `{', '.join(sorted(list(missing)[:3]))}` — add them to boost relevance."
+    )
+
+# DETAILED FEEDBACK — shown in tooltip or expandable panel (clarity + guidance)
+
+if found_in_skills:
+    detailed_feedback.append(
+        f"Some key terms from the job description are mentioned only in your Skills section: `{', '.join(sorted(found_in_skills))}`. "
+        "To make them more impactful, mention them in Experience or Projects, showing how you used them in real work."
+    )
+
+if found_in_context:
+    detailed_feedback.append(
+        f"You’ve placed these skills directly into Experience or Projects: `{', '.join(sorted(found_in_context))}`. "
+        "That’s excellent — it shows practical application, not just familiarity."
+    )
+
+if not found_in_context and not found_in_skills:
+    detailed_feedback.append(
+        f"Your resume doesn’t seem to reflect important JD keywords like `{', '.join(sorted(missing)[:5])}`. "
+        "Try weaving them into relevant sections to better align with the role and improve ATS matching."
+    )
+return score,short_feedback,long_feedback
