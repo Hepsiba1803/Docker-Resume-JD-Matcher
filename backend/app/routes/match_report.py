@@ -35,13 +35,13 @@ async def create_match_analysis(
     section_score, section_feedback=section_points.section_completion(resume_text)
 
     # content quality score and feedback
-    content_quality_score, content_quality_feedback = content_quality_points.content_quality_score_and_suggestions(resume_text)
+    content_quality_score, content_quality_short_feedback,content_quality_detailed_feedback = content_quality_points.content_quality_score_and_suggestions(resume_text)
 
     # formatting score and feedback
     formatting_score, formatting_feedback = formatting_points.formatting_score_and_suggestions(resume)
 
     # context or relevance score and feedback
-    context_score, context_feedback = context_or_relevance_points.keyword_context_points(sections, jd_keywords)
+    context_score, context_short_feedback,context_detailed_feedback= context_or_relevance_points.keyword_context_points(sections, jd_keywords)
 
     overall_score = keyword_score + section_score + content_quality_score + formatting_score + context_score
 
