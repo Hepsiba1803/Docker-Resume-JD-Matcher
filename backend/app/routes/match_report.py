@@ -65,7 +65,7 @@ async def create_match_analysis(
             "suggestions": section_feedback
 
         },
-        { 
+        "formatting":{ 
             "type":"formatting match",
             "score": formatting_score,
             "suggestions": formatting_feedback
@@ -74,13 +74,13 @@ async def create_match_analysis(
         "content quality":{ 
             "type":"content quality",
             "score": content_quality_score,
-            "suggestions": content_quality_feedback
-        },
+            "short_suggestions": content_quality_short_feedback,
+            "long_suggestions": content_quality_detailed_feedback,
         "context":{ 
             "type":"context or relevance",
             "score": context_score,
-            "suggestions": context_feedback
-
+            "short_suggestions": context_short_feedback,
+            "long_suggestions": context_detailed_feedback,
         }
         
         
