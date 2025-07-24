@@ -47,8 +47,7 @@ async def create_match_analysis(
 
     overall_feedback = "Resume are considered ATS-friendly if the score is greater than 80"
 
-    result =
-    {
+    result ={
         "total":{
             "key":"total"
             "type": "Total ATS score",
