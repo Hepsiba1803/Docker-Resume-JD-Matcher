@@ -49,6 +49,7 @@ async def create_match_analysis(
 
     result =[
         "total":{
+            "key":"total"
             "type": "Total ATS score",
             "score": overall_score,
             "suggestions" : overall_feedback
