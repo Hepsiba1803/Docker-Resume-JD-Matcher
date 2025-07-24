@@ -1,10 +1,7 @@
-// File: frontend/script.js
-
 const showResults = (results) => {
   const container = document.getElementById("results");
   container.innerHTML = "";
 
-  // Loop over expected keys
   const keys = [
     "total",
     "missingkeywords",
@@ -24,9 +21,9 @@ const showResults = (results) => {
     const header = `<div class="score-header">${item.type}</div>`;
     const score = `<div>Score: <span class="score-value">${item.score}</span></div>`;
 
-    // Missing keywords if present
+    // Handle missing keywords if present
     let missingHTML = "";
-    if (item.missing_keywords) {
+    if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
       missingHTML = `
         <div class="suggestions">
           <strong>Missing Keywords:</strong>
@@ -37,10 +34,11 @@ const showResults = (results) => {
       `;
     }
 
-    // Short suggestions (default display)
+    // Handle short suggestions (array or string)
     let suggestionsHTML = "";
-    if (item.short_suggestions || item.suggestions) {
-      const shortList = item.short_suggestions || item.suggestions;
+    const shortList = item.short_suggestions || item.suggestions;
+
+    if (Array.isArray(shortList)) {
       suggestionsHTML = `
         <div class="suggestions">
           <strong>Suggestions:</strong>
@@ -49,11 +47,18 @@ const showResults = (results) => {
           </ul>
         </div>
       `;
+    } else if (typeof shortList === "string") {
+      suggestionsHTML = `
+        <div class="suggestions">
+          <strong>Suggestions:</strong>
+          <p>${shortList}</p>
+        </div>
+      `;
     }
 
-    // Long suggestions (initially hidden, toggled with tooltip)
+    // Long suggestions (toggleable tooltip)
     let tooltipHTML = "";
-    if (item.long_suggestions) {
+    if (Array.isArray(item.long_suggestions)) {
       const tooltipId = `${key}-tooltip`;
       tooltipHTML = `
         <div class="tooltip-wrapper">
@@ -81,13 +86,15 @@ document.getElementById("uploadForm").onsubmit = async function (e) {
   e.preventDefault();
 
   document.getElementById("results").innerHTML = "";
-  document.getElementById("status").innerHTML = '<span class="loading">Uploading and analyzing...</span>';
+  document.getElementById("status").innerHTML =
+    '<span class="loading">Uploading and analyzing...</span>';
 
   const resumeFile = document.getElementById("resumeFile").files[0];
   const jdFile = document.getElementById("jdFile").files[0];
 
   if (!resumeFile || !jdFile) {
-    document.getElementById("status").innerHTML = '<span class="error">Please select both files.</span>';
+    document.getElementById("status").innerHTML =
+      '<span class="error">Please select both files.</span>';
     return;
   }
 
@@ -107,6 +114,7 @@ document.getElementById("uploadForm").onsubmit = async function (e) {
     showResults(data);
     document.getElementById("status").innerHTML = '<span class="loading">Done!</span>';
   } catch (err) {
-    document.getElementById("status").innerHTML = '<span class="error">Error: ' + err.message + "</span>";
+    document.getElementById("status").innerHTML =
+      '<span class="error">Error: ' + err.message + "</span>";
   }
 };
