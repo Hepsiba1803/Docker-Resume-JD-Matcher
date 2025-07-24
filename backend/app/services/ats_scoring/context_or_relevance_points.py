@@ -110,4 +110,4 @@ def keyword_context_points(sections: dict, jd_keywords: list, max_points=10) -> 
         f"Your resume doesn’t seem to reflect important JD keywords like `{', '.join(sorted(missing)[:5])}`. "
         "Try weaving them into relevant sections to better align with the role and improve ATS matching."
     )
-    return score,short_feedback,long_feedback
+    return score,short_feedback,detailed_feedback
