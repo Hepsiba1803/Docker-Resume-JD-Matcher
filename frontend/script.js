@@ -1,3 +1,5 @@
+// frontend/script.js
+
 const showResults = (results) => {
   const container = document.getElementById("results");
   container.innerHTML = "";
@@ -21,30 +23,27 @@ const showResults = (results) => {
     const header = `<div class="score-header">${item.type}</div>`;
     const score = `<div>Score: <span class="score-value">${item.score}</span></div>`;
 
-    // Handle missing keywords if present
+    // Handle missing keywords
     let missingHTML = "";
     if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
       missingHTML = `
         <div class="suggestions">
           <strong>Missing Keywords:</strong>
           <ul>
-            ${item.missing_keywords.map((k) => `<li>${k}</li>`).join("")}
+            ${item.missing_keywords.map(k => `<li>${k}</li>`).join("")}
           </ul>
         </div>
       `;
     }
 
-    // Handle short suggestions (array or string)
+    // Handle short suggestions
     let suggestionsHTML = "";
     const shortList = item.short_suggestions || item.suggestions;
-
     if (Array.isArray(shortList)) {
       suggestionsHTML = `
         <div class="suggestions">
           <strong>Suggestions:</strong>
-          <ul>
-            ${shortList.map((s) => `<li>${s}</li>`).join("")}
-          </ul>
+          <ul>${shortList.map(s => `<li>${s}</li>`).join("")}</ul>
         </div>
       `;
     } else if (typeof shortList === "string") {
@@ -56,17 +55,15 @@ const showResults = (results) => {
       `;
     }
 
-    // Long suggestions (toggleable tooltip)
+    // Handle long suggestions (toggle)
     let tooltipHTML = "";
-    if (Array.isArray(item.long_suggestions)) {
-      const tooltipId = `${key}-tooltip`;
+    if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
+      const tid = `${key}-tooltip`;
       tooltipHTML = `
         <div class="tooltip-wrapper">
-          <span class="tooltip-toggle" onclick="toggleTooltip('${tooltipId}')">💬 Details</span>
-          <div class="tooltip-content" id="${tooltipId}">
-            <ul>
-              ${item.long_suggestions.map((s) => `<li>${s}</li>`).join("")}
-            </ul>
+          <span class="tooltip-toggle" onclick="toggleTooltip('${tid}')">💬 Details</span>
+          <div class="tooltip-content" id="${tid}">
+            <ul>${item.long_suggestions.map(s => `<li>${s}</li>`).join("")}</ul>
           </div>
         </div>
       `;
@@ -79,42 +76,32 @@ const showResults = (results) => {
 
 function toggleTooltip(id) {
   const el = document.getElementById(id);
-  el.classList.toggle("visible");
+  if (el) el.classList.toggle("visible");
 }
 
-document.getElementById("uploadForm").onsubmit = async function (e) {
+document.getElementById("uploadForm").onsubmit = async (e) => {
   e.preventDefault();
-
   document.getElementById("results").innerHTML = "";
-  document.getElementById("status").innerHTML =
-    '<span class="loading">Uploading and analyzing...</span>';
+  document.getElementById("status").innerHTML = '<span class="loading">Uploading and analyzing...</span>';
 
-  const resumeFile = document.getElementById("resumeFile").files[0];
-  const jdFile = document.getElementById("jdFile").files[0];
-
-  if (!resumeFile || !jdFile) {
-    document.getElementById("status").innerHTML =
-      '<span class="error">Please select both files.</span>';
+  const resume = document.getElementById("resumeFile").files[0];
+  const jd = document.getElementById("jdFile").files[0];
+  if (!resume || !jd) {
+    document.getElementById("status").innerHTML = '<span class="error">Please select both files.</span>';
     return;
   }
 
   const formData = new FormData();
-  formData.append("resume", resumeFile);
-  formData.append("job_description", jdFile);
+  formData.append("resume", resume);
+  formData.append("job_description", jd);
 
   try {
-    const response = await fetch("/api/match-files", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) throw new Error("Server error: " + response.statusText);
-
-    const data = await response.json();
+    const res = await fetch("/api/match-files", { method: "POST", body: formData });
+    if (!res.ok) throw new Error(res.statusText);
+    const data = await res.json();
     showResults(data);
     document.getElementById("status").innerHTML = '<span class="loading">Done!</span>';
   } catch (err) {
-    document.getElementById("status").innerHTML =
-      '<span class="error">Error: ' + err.message + "</span>";
+    document.getElementById("status").innerHTML = `<span class="error">Error: ${err.message}</span>`;
   }
 };
