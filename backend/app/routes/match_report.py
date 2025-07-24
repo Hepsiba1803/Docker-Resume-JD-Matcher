@@ -76,6 +76,7 @@ async def create_match_analysis(
             "score": content_quality_score,
             "short_suggestions": content_quality_short_feedback,
             "long_suggestions": content_quality_detailed_feedback,
+        },
         "context":{ 
             "type":"context or relevance",
             "score": context_score,
