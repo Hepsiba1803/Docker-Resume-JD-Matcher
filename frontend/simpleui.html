@@ -5,10 +5,10 @@
   <title>ATS Resume Matcher</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="frontend/styles.css" />
-  
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-  <h1>🎯 Resume-JD Matcher</h1>
+  <h1>✨ Resume-JD Matcher</h1>
 
   <!-- Upload Form -->
   <div class="card upload-card">
@@ -32,8 +32,15 @@
   <!-- Results -->
   <div id="results" class="results-grid"></div>
 
-  <!-- JS -->
- <script src="frontend/script.js"></script>
+  <!-- Tooltip Modal -->
+  <div id="tooltip-modal" class="tooltip-modal hidden">
+    <div class="tooltip-content">
+      <span id="tooltip-close">&times;</span>
+      <div id="tooltip-text"></div>
+    </div>
+  </div>
 
+  <!-- JS -->
+  <script src="frontend/script.js"></script>
 </body>
 </html>
