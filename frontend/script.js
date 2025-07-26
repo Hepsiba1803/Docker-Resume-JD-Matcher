@@ -1,3 +1,6 @@
+const resultsContainer = document.getElementById("results");
+const statusEl = document.getElementById("status");
+
 const showResults = (results) => {
   resultsContainer.innerHTML = "";
 
