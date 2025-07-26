@@ -121,6 +121,34 @@ function sanitizeKey(key) {
   return key.replace(/\s+/g, '_');
 }
 
+// Helper function to convert long suggestions to bullet points
+function formatLongSuggestions(longSuggestions) {
+  if (!longSuggestions || longSuggestions.length === 0) {
+    return '';
+  }
+
+  // Convert array of long suggestions to bullet points
+  const bulletPoints = longSuggestions.map(suggestion => {
+    // Split long suggestion into sentences for better readability
+    const sentences = suggestion.split('. ').filter(s => s.trim().length > 0);
+    
+    if (sentences.length === 1) {
+      // If it's just one sentence, return as single bullet point
+      return `<li>${sentences[0].trim()}${sentences[0].endsWith('.') ? '' : '.'}</li>`;
+    } else {
+      // If multiple sentences, create a main bullet with sub-points
+      const mainPoint = sentences[0] + '.';
+      const subPoints = sentences.slice(1).map(s => 
+        `<li class="sub-point">${s.trim()}${s.endsWith('.') ? '' : '.'}</li>`
+      ).join('');
+      
+      return `<li>${mainPoint}${subPoints ? `<ul class="sub-list">${subPoints}</ul>` : ''}</li>`;
+    }
+  }).join('');
+
+  return bulletPoints;
+}
+
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -251,11 +279,13 @@ function renderResults(results) {
 
     if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
       const tid = `${sanitizeKey(key)}-tooltip`;
+      const formattedLongSuggestions = formatLongSuggestions(item.long_suggestions);
+      
       tooltipHTML = `
         <div class="tooltip-wrapper">
           <span class="tooltip-toggle" tabindex="0" role="button" aria-expanded="false" aria-controls="${tid}" onclick="toggleTooltip('${tid}')">💬 View Details</span>
           <div class="tooltip-content" id="${tid}" role="region" aria-live="polite">
-            <ul>${item.long_suggestions.map(s => `<li>${s}</li>`).join("")}</ul>
+            <ul class="detailed-suggestions">${formattedLongSuggestions}</ul>
           </div>
         </div>
       `;
