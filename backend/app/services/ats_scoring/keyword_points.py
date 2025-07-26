@@ -17,7 +17,7 @@ def compute_keyword_score_and_suggestions(job_description: str, resume_text: str
     jd_keywords = extract_relevant_skills_and_keywords(job_description)
     resume_keywords = extract_relevant_skills_and_keywords(resume_text)
     max_points = 40
-    points_per_matched_keyword = 2
+    points_per_matched_keyword = 5
     matched_keywords = jd_keywords.intersection(resume_keywords)
     missing_keywords = list(jd_keywords.difference(resume_keywords))
     score = min(len(matched_keywords) * points_per_matched_keyword, max_points)

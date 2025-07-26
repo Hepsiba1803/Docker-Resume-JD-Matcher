@@ -13,6 +13,37 @@ const statusEl = document.getElementById('status');
 const resultsContainer = document.getElementById('results');
 const analyzeBtn = document.getElementById('analyzeBtn');
 
+// File input handlers for visual feedback
+resumeFileInput.addEventListener('change', function(e) {
+  const button = document.getElementById('resumeButton');
+  const fileName = document.getElementById('resumeFileName');
+  
+  if (e.target.files.length > 0) {
+    button.classList.add('has-file');
+    fileName.textContent = e.target.files[0].name;
+    button.querySelector('.upload-icon').textContent = '✅';
+  } else {
+    button.classList.remove('has-file');
+    fileName.textContent = '';
+    button.querySelector('.upload-icon').textContent = '📄';
+  }
+});
+
+jdFileInput.addEventListener('change', function(e) {
+  const button = document.getElementById('jdButton');
+  const fileName = document.getElementById('jdFileName');
+  
+  if (e.target.files.length > 0) {
+    button.classList.add('has-file');
+    fileName.textContent = e.target.files[0].name;
+    button.querySelector('.upload-icon').textContent = '✅';
+  } else {
+    button.classList.remove('has-file');
+    fileName.textContent = '';
+    button.querySelector('.upload-icon').textContent = '📋';
+  }
+});
+
 // Sanitize object key
 function sanitizeKey(key) {
   return key.replace(/\s+/g, '_');
@@ -98,12 +129,12 @@ function renderResults(results) {
 
   const keys = ["total", "missingkeywords", "sections", "formatting", "content quality", "context"];
   const emojiMap = {
-  total: "🎯",
-  missingkeywords: "❌",
-  sections: "📄",
-  formatting: "🛠️",
-  "content quality": "✍️",
-  context: "🧩"
+    total: "🎯",
+    missingkeywords: "❌",
+    sections: "📄",
+    formatting: "🛠️",
+    "content quality": "✍️",
+    context: "🧩"
   };
 
   keys.forEach((key) => {
@@ -150,7 +181,7 @@ function renderResults(results) {
       const tid = `${sanitizeKey(key)}-tooltip`;
       tooltipHTML = `
         <div class="tooltip-wrapper">
-          <span class="tooltip-toggle" tabindex="0" role="button" aria-expanded="false" aria-controls="${tid}" onclick="toggleTooltip('${tid}')">💬 Details</span>
+          <span class="tooltip-toggle" tabindex="0" role="button" aria-expanded="false" aria-controls="${tid}" onclick="toggleTooltip('${tid}')">💬 View Details</span>
           <div class="tooltip-content" id="${tid}" role="region" aria-live="polite">
             <ul>${item.long_suggestions.map(s => `<li>${s}</li>`).join("")}</ul>
           </div>

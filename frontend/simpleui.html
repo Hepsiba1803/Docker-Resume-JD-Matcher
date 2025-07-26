@@ -7,24 +7,46 @@
   <link rel="stylesheet" href="frontend/styles.css" />
 </head>
 <body>
-  <h1>🎯 Resume-JD Matcher</h1>
+  <div class="background-decoration"></div>
+  
+  <div class="header">
+    <h1>🎯 Resume-JD Matcher</h1>
+    <p>Analyze how well your resume matches job descriptions with AI-powered insights</p>
+  </div>
+
   <div class="container">
     <form id="uploadForm" novalidate>
       <div class="form-group">
-        <label for="resumeFile">Upload Resume</label>
-        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />
-        <small class="hint-text">Only PDF or DOCX files allowed.</small>
+        <label for="resumeFile">📄 Upload Resume</label>
+        <div class="file-input-wrapper">
+          <input type="file" id="resumeFile" class="file-input" accept=".pdf,.doc,.docx" required />
+          <div class="file-input-button" id="resumeButton">
+            <div class="upload-icon">📄</div>
+            <div>Choose Resume File</div>
+            <div class="file-name" id="resumeFileName"></div>
+          </div>
+        </div>
+        <small class="hint-text">Only PDF or DOCX files allowed</small>
       </div>
 
       <div class="form-group">
-        <label for="jdFile">Upload Job Description</label>
-        <input type="file" id="jdFile" accept=".pdf,.doc,.docx" required />
-        <small class="hint-text">Only PDF or DOCX files allowed.</small>
+        <label for="jdFile">📋 Upload Job Description</label>
+        <div class="file-input-wrapper">
+          <input type="file" id="jdFile" class="file-input" accept=".pdf,.doc,.docx" required />
+          <div class="file-input-button" id="jdButton">
+            <div class="upload-icon">📋</div>
+            <div>Choose Job Description</div>
+            <div class="file-name" id="jdFileName"></div>
+          </div>
+        </div>
+        <small class="hint-text">Only PDF or DOCX files allowed</small>
       </div>
 
-      <button type="submit" id="analyzeBtn">
-        Analyze Match
-      </button>
+      <div class="submit-section">
+        <button type="submit" id="analyzeBtn">
+          <span id="analyzeText">Analyze Match</span>
+        </button>
+      </div>
     </form>
 
     <div id="status" role="alert" aria-live="assertive"></div>
