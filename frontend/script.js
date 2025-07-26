@@ -130,3 +130,10 @@ const showResults = (results) => {
     resultsContainer.appendChild(card);
   });
 };
+function toggleTooltip(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.toggle('visible');
+  }
+}
+
