@@ -8,7 +8,7 @@ function toggleTooltip(id) {
 
 const uploadForm = document.getElementById('uploadForm');
 const resumeFileInput = document.getElementById('resumeFile');
-const jdTextInput = document.getElementById('jdText');
+const jdFileInput = document.getElementById('jdFile');
 const statusEl = document.getElementById('status');
 const resultsContainer = document.getElementById('results');
 const analyzeBtn = document.getElementById('analyzeBtn');
@@ -33,19 +33,27 @@ uploadForm.addEventListener('submit', async (e) => {
     statusEl.textContent = "Please upload a resume file.";
     return;
   }
-  if (!jdTextInput.value.trim()) {
-    statusEl.textContent = "Please enter a job description.";
+  if (!jdFileInput.files.length) {
+    statusEl.textContent = "Please upload a job description file.";
     return;
   }
 
-  const file = resumeFileInput.files[0];
+  const resumeFile = resumeFileInput.files[0];
+  const jdFile = jdFileInput.files[0];
+
   const allowedTypes = [
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   ];
-  if (!allowedTypes.includes(file.type)) {
-    statusEl.textContent = "Invalid file format. Please upload PDF or DOCX.";
+
+  if (!allowedTypes.includes(resumeFile.type)) {
+    statusEl.textContent = "Invalid resume file format. Please upload PDF or DOCX.";
+    return;
+  }
+
+  if (!allowedTypes.includes(jdFile.type)) {
+    statusEl.textContent = "Invalid job description file format. Please upload PDF or DOCX.";
     return;
   }
 
@@ -55,8 +63,8 @@ uploadForm.addEventListener('submit', async (e) => {
 
   // Prepare request
   const formData = new FormData();
-  formData.append('resume', file);
-  formData.append('job_description', new Blob([jdTextInput.value.trim()], {type: 'text/plain'}), 'job_description.txt');
+  formData.append('resume', resumeFile);
+  formData.append('job_description', jdFile);
 
   try {
     const response = await fetch('/api/match-files', {
