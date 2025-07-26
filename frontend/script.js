@@ -20,7 +20,7 @@ uploadForm.addEventListener('submit', async (e) => {
     formData.append('resume', resumeFile);
     formData.append('job_description', jdFile);
 
-    const response = await fetch('/match-files', {
+    const response = await fetch('/api/match-files', {
       method: 'POST',
       body: formData,
     });
