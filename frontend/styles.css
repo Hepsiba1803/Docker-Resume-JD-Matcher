@@ -1,4 +1,5 @@
 /* styles.css */
+
 body {
   font-family: Arial, sans-serif;
   background: #f7f7f7;
@@ -32,6 +33,7 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
@@ -51,6 +53,7 @@ button:hover {
   padding: 15px;
   border-radius: 8px;
   position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .score-header {
@@ -69,28 +72,61 @@ button:hover {
 .suggestions ul {
   padding-left: 20px;
   margin: 10px 0;
+  list-style-type: disc;
 }
 
-.tooltip-icon {
+.tooltip-wrapper {
+  margin-top: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-toggle {
   cursor: pointer;
   color: #3498db;
-  margin-left: 8px;
+  font-weight: bold;
+  user-select: none;
+  transition: color 0.3s ease;
 }
 
-.tooltip-icon:hover {
+.tooltip-toggle:hover {
   color: #21618c;
 }
 
-/* Modal */
+.tooltip-content {
+  display: none;
+  position: relative;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  margin-top: 5px;
+  border-radius: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.tooltip-content.visible {
+  display: block;
+}
+
+/* Missing Keywords styling */
+.suggestions strong {
+  color: #34495e;
+}
+
+/* Modal window styling for tooltip details if needed */
 #tooltipModal {
   display: none;
   position: fixed;
-  z-index: 999;
+  z-index: 9999;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,0.5);
+  backdrop-filter: blur(3px);
 }
 
 #tooltipBox {
@@ -100,15 +136,64 @@ button:hover {
   width: 80%;
   max-width: 500px;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  position: relative;
 }
 
 #tooltipContent ul {
   padding-left: 20px;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 #tooltipBox button {
   background-color: #e74c3c;
   margin-top: 10px;
   float: right;
+  padding: 8px 14px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#tooltipBox button:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .card, #tooltipBox {
+    width: 95%;
+    margin: 10px auto;
+  }
+  .results-grid {
+    gap: 15px;
+  }
+}
+
+/* Accessibility */
+.tooltip-toggle:focus {
+  outline: 2px solid #2980b9;
+  outline-offset: 2px;
+}
+
+/* Scrollbar style for tooltip-content (for better UX) */
+.tooltip-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tooltip-content::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 6px;
+}
+
+.tooltip-content::-webkit-scrollbar-thumb {
+  background: #b0bec5; 
+  border-radius: 6px;
+}
+
+.tooltip-content::-webkit-scrollbar-thumb:hover {
+  background: #90a4ae; 
 }
