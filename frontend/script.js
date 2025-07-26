@@ -1,62 +1,53 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const uploadForm = document.getElementById("uploadForm");
-  const resultsContainer = document.getElementById("results");
-  const statusEl = document.getElementById("status");
+const showResults = (results) => {
+  resultsContainer.innerHTML = "";
 
-  const showResults = (results) => {
-    resultsContainer.innerHTML = "";
+  const keys = [
+    "total",
+    "missingkeywords",
+    "sections",
+    "formatting",
+    "content_quality",
+    "context",
+  ];
 
-    const keys = [
-      "total",
-      "missingkeywords",
-      "sections",
-      "formatting",
-      "content_quality",
-      "context",
-    ];
+  keys.forEach((key) => {
+    const item = results[key];
+    if (!item) return;
 
-    keys.forEach((key) => {
-      const item = results[key];
-      if (!item) return;
+    const card = document.createElement("div");
+    card.className = "score-card";
 
-      const card = document.createElement("div");
-      card.className = "score-card";
+    const header = `<div class="score-header">${item.type}</div>`;
+    const score = `<div>Score: <span class="score-value">${item.score}</span></div>`;
 
-      const header = `<div class="score-header">${item.type}</div>`;
-      const score = `<div>Score: <span class="score-value">${item.score}</span></div>`;
+    // Handle missing keywords section specifically
+    let missingHTML = "";
+    if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
+      missingHTML = `
+        <div class="suggestions">
+          <strong>Missing Keywords:</strong>
+          <ul>${item.missing_keywords.map(k => `<li>${k}</li>`).join("")}</ul>
+        </div>
+      `;
+    }
 
-      // Missing Keywords
-      let missingHTML = "";
-      if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
-        missingHTML = `
-          <div class="suggestions">
-            <strong>Missing Keywords:</strong>
-            <ul>${item.missing_keywords.map(k => `<li>${k}</li>`).join("")}</ul>
-          </div>
-        `;
-      }
+    // Determine which suggestion lists to use
+    // context and content_quality have both short_suggestions and long_suggestions
+    // others have only one suggestions list (either 'suggestions' or 'short_suggestions')
+    let suggestionsHTML = "";
+    let tooltipHTML = "";
 
-      // Short Suggestions
-      let suggestionsHTML = "";
-      const shortList = item.short_suggestions || item.suggestions;
-      if (Array.isArray(shortList)) {
-        suggestionsHTML = `
-          <div class="suggestions">
-            <strong>Suggestions:</strong>
-            <ul>${shortList.map(s => `<li>${s}</li>`).join("")}</ul>
-          </div>
-        `;
-      } else if (typeof shortList === "string") {
-        suggestionsHTML = `
-          <div class="suggestions">
-            <strong>Suggestions:</strong>
-            <p>${shortList}</p>
-          </div>
-        `;
-      }
+    if ((key === "context" || key === "content_quality") &&
+        Array.isArray(item.short_suggestions) && item.short_suggestions.length > 0) {
+      // Context and content_quality: show short suggestions
+      suggestionsHTML = `
+        <div class="suggestions">
+          <strong>Suggestions:</strong>
+          <ul>${item.short_suggestions.map(s => `<li>${s}</li>`).join("")}</ul>
+        </div>
+      `;
 
-      // Long Suggestions
-      let tooltipHTML = "";
+      // Show long suggestions if exist for Details toggle
       if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
         const tid = `${key}-tooltip`;
         tooltipHTML = `
@@ -68,46 +59,29 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         `;
       }
+    } else {
+      // For other sections: get suggestions either from 'suggestions' or 'short_suggestions'
+      const suggestionsList = item.suggestions || item.short_suggestions;
 
-      card.innerHTML = header + score + suggestionsHTML + tooltipHTML + missingHTML;
-      resultsContainer.appendChild(card);
-    });
-  };
-
-  uploadForm.onsubmit = async (e) => {
-    e.preventDefault();
-    resultsContainer.innerHTML = "";
-    statusEl.innerHTML = '<span class="loading">Uploading and analyzing...</span>';
-
-    const resume = document.getElementById("resumeFile").files[0];
-    const jd = document.getElementById("jdFile").files[0];
-
-    if (!resume || !jd) {
-      statusEl.innerHTML = '<span class="error">Please select both files.</span>';
-      return;
+      if (Array.isArray(suggestionsList) && suggestionsList.length > 0) {
+        suggestionsHTML = `
+          <div class="suggestions">
+            <strong>Suggestions:</strong>
+            <ul>${suggestionsList.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>
+        `;
+      } else if (typeof suggestionsList === "string") {
+        suggestionsHTML = `
+          <div class="suggestions">
+            <strong>Suggestions:</strong>
+            <p>${suggestionsList}</p>
+          </div>
+        `;
+      }
+      // No details toggle here since no long suggestions expected
     }
 
-    const formData = new FormData();
-    formData.append("resume", resume);
-    formData.append("job_description", jd);
-
-    try {
-      const res = await fetch("/api/match-files", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("Server error: " + res.statusText);
-      const data = await res.json();
-      showResults(data);
-      statusEl.innerHTML = '<span class="loading">Done!</span>';
-    } catch (err) {
-      statusEl.innerHTML = `<span class="error">Error: ${err.message}</span>`;
-    }
-  };
-});
-
-function toggleTooltip(id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle("visible");
-}
+    card.innerHTML = header + score + suggestionsHTML + tooltipHTML + missingHTML;
+    resultsContainer.appendChild(card);
+  });
+};
