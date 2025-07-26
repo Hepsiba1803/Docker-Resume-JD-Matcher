@@ -149,4 +149,4 @@ def formatting_score_and_suggestions(resume: UploadFile) -> tuple:
     formatting_points = max(max_points - deductions, 0)
     if not feedback:
         feedback.append("✅ Well done! Your resume formatting is clean and ATS-friendly.")
-    return (formatting_points, feedback)
+    return formatting_points, feedback
