@@ -89,6 +89,7 @@ sass,programming language
 scss,programming language
 scala,programming language
 scikit-learn,library
+scipy, library
 scrum,technical skill
 seaborn,library
 selenium,tool
@@ -106,3 +107,139 @@ unit testing,technical skill
 unix,technical skill
 vue.js,library
 vuejs,library
+bash,programming language
+shell scripting,technical skill
+power shell,programming language
+zsh,programming language
+restful api,technology
+microservices,technical skill
+grpc,technology
+api development,technical skill
+oop,technical skill
+object oriented programming,technical skill
+functional programming,technical skill
+design patterns,technical skill
+mvc,technical skill
+api testing,technical skill
+postman,tool
+swagger,tool
+openapi,tool
+test automation,technical skill
+test driven development,technical skill
+tdd,technical skill
+behavior driven development,technical skill
+bdd,technical skill
+pytest,tool
+unittest,tool
+cucumber,tool
+robot framework,tool
+jmeter,tool
+gatling,tool
+load testing,technical skill
+performance testing,technical skill
+splunk,tool
+datadog,tool
+new relic,tool
+prometheus,tool
+grafana,tool
+elk stack,tool
+elasticsearch,tool
+logstash,tool
+kibana,tool
+airflow,tool
+ansible,tool
+terraform,tool
+cloudformation,tool
+jenkins pipeline,tool
+circleci,tool
+travis ci,tool
+bitbucket,tool
+jira,tool
+confluence,tool
+asana,tool
+notion,tool
+trello,tool
+markdown,technical skill
+yaml,technical skill
+json,technical skill
+xml,technical skill
+csv,technical skill
+version control,technical skill
+gitlab,tool
+svn,tool
+mercurial,tool
+monorepo,technical skill
+multi-repo,technical skill
+continuous deployment,technical skill
+continuous monitoring,technical skill
+observability,technical skill
+incident management,technical skill
+incident response,technical skill
+devops,technical skill
+site reliability engineering,technical skill
+sre,technical skill
+it automation,technical skill
+security compliance,technical skill
+iam,technical skill
+identity and access management,technical skill
+network security,technical skill
+threat modeling,technical skill
+encryption,technical skill
+ssl,technical skill
+tls,technical skill
+sso,technical skill
+single sign on,technical skill
+oauth,technical skill
+saml,technical skill
+api gateway,tool
+kong,tool
+aws lambda,tool
+cloud functions,tool
+serverless,technical skill
+big data,technology
+data engineering,technical skill
+mlops,technical skill
+model deployment,technical skill
+model monitoring,technical skill
+experiment tracking,technical skill
+mlflow,tool
+kubeflow,tool
+databricks,tool
+snowflake,tool
+redshift,tool
+athena,tool
+presto,tool
+trino,tool
+clickhouse,tool
+google data studio,tool
+looker,tool
+business intelligence,technical skill
+data pipelines,technical skill
+data ingestion,technical skill
+data wrangling,technical skill
+feature engineering,technical skill
+nlp,technical skill
+natural language processing,technical skill
+computer vision,technical skill
+deep learning,technical skill
+machine learning,technical skill
+supervised learning,technical skill
+unsupervised learning,technical skill
+reinforcement learning,technical skill
+statistics,technical skill
+probability,technical skill
+time series,technical skill
+forecasting,technical skill
+data mining,technical skill
+data cleaning,technical skill
+eda,technical skill
+exploratory data analysis,technical skill
+kanban,technical skill
+agile methodology,technical skill
+scrum master,technical skill
+product management,technical skill
+stakeholder management,soft skill
+mentoring,soft skill
+presentation,soft skill
+public speaking,soft skill
+

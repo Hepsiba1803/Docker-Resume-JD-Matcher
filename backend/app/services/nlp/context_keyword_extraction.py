@@ -5,6 +5,7 @@ import csv
 import os
 from functools import lru_cache
 from sentence_transformers import SentenceTransformer
+import fuzzymatching
 
 
 # Absolute path to the CSV file
@@ -33,6 +34,7 @@ def load_skill_set(csv_path):
 
 SKILL_SET = load_skill_set(csv_path)
 
+
 def extract_relevant_skills_and_keywords(text, top_n=500) -> set[str]:
     """
     Extracts relevant skills and keywords from text using both a curated skills dictionary
@@ -59,8 +61,9 @@ def extract_relevant_skills_and_keywords(text, top_n=500) -> set[str]:
     all_keywords = set()
     missing_keywords = set()
     for kw in keybert_phrases:
-        if kw in SKILL_SET:
-            all_keywords.add(kw.lower())
+        matched_skill = fuzzymatching.fuzzy_skill_match(kw, SKILL_SET)
+        if matched_skill:
+            all_keywords.add(matched_skill)
         else:
             missing_keywords.add(kw.lower())
     return all_keywords

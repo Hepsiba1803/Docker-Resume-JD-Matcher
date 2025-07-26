@@ -94,5 +94,6 @@ blis>=0.7.8,<0.8
 networkx>=3.4.2,<3.6
 numpy>=1.24.0,<1.27.0
 scipy>=1.15.0,<2.0.0huggingface-hub==0.33.1
+rapidfuzz==3.13.0
 
 
