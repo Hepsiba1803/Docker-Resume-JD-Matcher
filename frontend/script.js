@@ -82,7 +82,7 @@ const showResults = (results) => {
     let suggestionsHTML = "";
     let tooltipHTML = "";
 
-    if ((key === "context" || key === "content_quality") &&
+    if ((key === "context" || key === "content quality") &&
         Array.isArray(item.short_suggestions) && item.short_suggestions.length > 0) {
       // Context and content_quality: show short suggestions
       suggestionsHTML = `
