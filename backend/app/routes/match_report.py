@@ -58,19 +58,20 @@ async def create_match_analysis(
             "type":"keyword match",
             "score": keyword_score,
             "missing_keywords": missing_keywords,
-            "suggestions": keyword_feedback
+            "short_suggestions": keyword_feedback,
+            "long_suggestions": [],
         },
         "sections":{ 
             "type":"standard section match",
             "score": section_score,
-            "suggestions": section_feedback
-
+            "short_suggestions": section_feedback,
+            "long_suggestions": [],
         },
         "formatting":{ 
             "type":"formatting match",
             "score": formatting_score,
-            "suggestions": formatting_feedback
-
+            "short_suggestions": formatting_feedback,
+            "long_suggestions": [],
         },
         "content quality":{ 
             "type":"content quality",
