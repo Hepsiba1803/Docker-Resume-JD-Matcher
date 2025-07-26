@@ -1,95 +1,108 @@
 skill,category
-agile,Technical Skill
-angular,Library
-apache airflow,Tool
-apache kafka,Technology
-apache spark,Technology
-aws,Technology
-aws emr,Tool
-aws glue,Tool
-aws redshift,Tool
-azure,Technology
-azure data lake storage,Tool
-batch data processing,Technical Skill
-c#,Programming Language
-c++,Programming Language
-cassandra,Tool
-ci/cd,Tool
-collaboration,Soft Skill
-communication,Soft Skill
-containerization,Technical Skill
-css,Programming_Language
-data analysis,Technical Skill
-data governance,Technical Skill
-data integration,Technical Skill
-data lake,Technology
-data modeling,Technical_Skill
-data quality management,Technical Skill
-data security,Technical Skill
-data validation,Technical Skill
-data visualization,Technical Skill
-data warehousing,Technical Skill
-distributed systems,Technical Skill
-django,Library
-docker,Tool
-dynamodb,Tool
-elt,Technical Skill
-etl,Technical Skill
-express,Library
-flask,Library
-gcp,Technology
-gcp bigquery,Tool
-git,Tool
-github,Tool
-go,Programming Language
-graphql,Technology
-hadoop,Technology
-html,Programming Language
-java,Programming Language
-javascript,Programming Language
-jenkins,Tool
-jira,Tool
-junit,Tool
-kubernetes,Tool
-leadership,Soft Skill
-less,Programming Language
-linux,Technical Skill
-luigi,Tool
-matplotlib,Library
-mongodb,Tool
-mysql,Tool
-node.js,Library
-numpy,Library
-oracle,Tool
-pandas,Library
-php,Programming Language
-postgresql,Tool
-power bi,Tool
-problem solving,Soft Skill
-pytest,Tool
-python,Programming Language
-pytorch,Library
-react,Library
-redis,Tool
-rest api,Technology
-rest api development,Technical Skill
-ruby,Programming Language
-sass,Programming Language
-scala,Programming Language
-scikit-learn,Library
-scrum,Technical Skill
-seaborn,Library
-selenium,Tool
-spring,Library
-sql,Technical Skill
-sql server,Tool
-sqlite,Tool
-streaming data processing,Technical Skill
-swift,Programming Language
-tableau,Tool
-teamwork,Soft Skill
-tensorflow,Library
-typescript,Programming Language
-unit testing,Technical Skill
-unix,Technical Skill
-vue.js,Library
+agile,technical skill
+angular,library
+apache airflow,tool
+apache kafka,technology
+apache spark,technology
+aws,technology
+aws emr,tool
+aws glue,tool
+aws redshift,tool
+azure,technology
+azure data lake storage,tool
+batch data processing,technical skill
+c#,programming language
+c-sharp,programming language
+c++,programming language
+c plus plus,programming language
+cassandra,tool
+ci/cd,tool
+continuous integration,tool
+continuous delivery,tool
+collaboration,soft skill
+communication,soft skill
+containerization,technical skill
+css,programming language
+cascading style sheets,programming language
+data analysis,technical skill
+data governance,technical skill
+data integration,technical skill
+data lake,technology
+data modeling,technical skill
+data quality management,technical skill
+data security,technical skill
+data validation,technical skill
+data visualization,technical skill
+data warehousing,technical skill
+distributed systems,technical skill
+django,library
+docker,tool
+dynamodb,tool
+elt,technical skill
+etl,technical skill
+express,library
+flask,library
+gcp,technology
+google cloud platform,technology
+gcp bigquery,tool
+git,tool
+github,tool
+go,programming language
+golang,programming language
+graphql,technology
+hadoop,technology
+html,programming language
+html5,programming language
+java,programming language
+javascript,programming language
+js,programming language
+jenkins,tool
+jira,tool
+junit,tool
+kubernetes,tool
+leadership,soft skill
+less,programming language
+linux,technical skill
+luigi,tool
+matplotlib,library
+mongodb,tool
+mysql,tool
+node.js,library
+nodejs,library
+numpy,library
+oracle,tool
+pandas,library
+php,programming language
+postgresql,tool
+power bi,tool
+powerbi,tool
+problem solving,soft skill
+pytest,tool
+python,programming language
+pytorch,library
+react,library
+redis,tool
+rest api,technology
+rest api development,technical skill
+ruby,programming language
+sass,programming language
+scss,programming language
+scala,programming language
+scikit-learn,library
+scrum,technical skill
+seaborn,library
+selenium,tool
+spring,library
+sql,technical skill
+sql server,tool
+sqlite,tool
+streaming data processing,technical skill
+swift,programming language
+tableau,tool
+teamwork,soft skill
+tensorflow,library
+typescript,programming language
+unit testing,technical skill
+unix,technical skill
+vue.js,library
+vuejs,library
