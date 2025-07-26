@@ -29,16 +29,6 @@ synonym_map = {
     # Add more variants as you discover them
 }
 
-def map_to_canonical(skill):
-    skill_norm = skill.lower().strip()
-    return synonym_map.get(skill_norm, skill_norm)
-def normalize_skill(text: str) -> str:
-    """
-    Normalize skill strings: lowercase, strip, remove punctuation, expand symbols.
-    """
-    text = text.lower().strip()
-    text = text.replace('.', '').replace('#', ' sharp').replace('+', ' plus ')
-    return text
 
 def map_to_canonical(skill: str) -> str:
     """
