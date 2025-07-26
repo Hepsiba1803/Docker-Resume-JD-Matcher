@@ -196,18 +196,48 @@ except Exception as e:
     SKILL_SET = set()  # Fallback to empty set
 
 def _clean_text(text: str) -> str:
-    """Clean and normalize text input."""
+    """Clean and normalize text input with advanced preprocessing."""
     if not isinstance(text, str):
         text = str(text)
     
-    # Remove extra whitespace and normalize
-    text = ' '.join(text.split())
+    # Handle common PDF extraction issues
+    import re
     
-    # Remove special characters that might interfere with processing
-    # but keep hyphens and periods as they're common in technical terms
-    text = ''.join(char for char in text if char.isalnum() or char in ' .-_/')
+    # Fix concatenated words by adding spaces before capital letters in camelCase
+    text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
     
-    return text.lower()
+    # Add spaces around numbers when they're attached to letters
+    text = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', text)
+    text = re.sub(r'(\d)([a-zA-Z])', r'\1 \2', text)
+    
+    # Fix common word concatenations by adding spaces before common words
+    common_words = ['and', 'the', 'with', 'for', 'from', 'that', 'this', 'have', 'will', 'should', 'would', 'could']
+    for word in common_words:
+        # Add space before these words when they appear concatenated
+        pattern = r'([a-z])(' + word + r')([a-z])'
+        text = re.sub(pattern, r'\1 \2 \3', text, flags=re.IGNORECASE)
+    
+    # Remove excessive punctuation and special characters
+    text = re.sub(r'[^\w\s.-]', ' ', text)
+    
+    # Remove excessive dots and dashes
+    text = re.sub(r'\.{2,}', ' ', text)
+    text = re.sub(r'-{2,}', ' ', text)
+    
+    # Normalize whitespace
+    text = re.sub(r'\s+', ' ', text)
+    
+    # Remove very short and very long words (likely extraction errors)
+    words = text.split()
+    filtered_words = []
+    for word in words:
+        word = word.strip('.-_')
+        if 2 <= len(word) <= 30:  # Keep words between 2-30 characters
+            filtered_words.append(word)
+    
+    text = ' '.join(filtered_words)
+    
+    return text.lower().strip()
 
 def _validate_input(text: str, top_n: int) -> Tuple[str, int]:
     """Validate and clean input parameters."""
@@ -255,17 +285,28 @@ def extract_relevant_skills_and_keywords(text: str, top_n: int = 75) -> Set[str]
         # Extract keywords using KeyBERT with error handling
         try:
             kw_model = get_kw_model()
+            
+            # Use more conservative KeyBERT settings for better quality
             keybert_results = kw_model.extract_keywords(
                 cleaned_text,
-                keyphrase_ngram_range=(1, 3),
+                keyphrase_ngram_range=(1, 2),  # Reduced from (1,3) to avoid long garbage phrases
                 stop_words='english',
-                top_n=validated_top_n,
-                use_mmr=True,  # Use MMR for better diversity
-                diversity=0.5
+                top_n=min(validated_top_n, 50),  # Reduced top_n for better quality
+                use_mmr=True,
+                diversity=0.7,  # Increased diversity to avoid similar garbage phrases
+                nr_candidates=20  # Limit candidates to improve quality
             )
             
-            keybert_phrases = set(kw for kw, _ in keybert_results)
-            logger.debug(f"Extracted {len(keybert_phrases)} KeyBERT phrases")
+            keybert_phrases = set()
+            for kw, score in keybert_results:
+                # Additional filtering for garbage phrases
+                if (len(kw.split()) <= 3 and  # Max 3 words
+                    len(kw) >= 3 and len(kw) <= 25 and  # Reasonable length
+                    not re.search(r'(.)\1{3,}', kw) and  # No repeated characters (aaaa)
+                    score > 0.1):  # Minimum relevance score
+                    keybert_phrases.add(kw)
+            
+            logger.debug(f"Extracted {len(keybert_phrases)} filtered KeyBERT phrases")
             
         except Exception as e:
             logger.error(f"KeyBERT extraction failed: {e}")
