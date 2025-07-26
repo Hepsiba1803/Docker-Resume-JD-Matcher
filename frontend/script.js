@@ -1,25 +1,65 @@
+// Helper: toggle tooltip visibility
+function toggleTooltip(id) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.classList.toggle('visible');
+  }
+}
+
 const uploadForm = document.getElementById('uploadForm');
 const resumeFileInput = document.getElementById('resumeFile');
-const jdFileInput = document.getElementById('jdFile');
+const jdTextInput = document.getElementById('jdText');
 const statusEl = document.getElementById('status');
 const resultsContainer = document.getElementById('results');
+const analyzeBtn = document.getElementById('analyzeBtn');
+
+// Utility: sanitize key for id usage (replace spaces with underscores)
+function sanitizeKey(key) {
+  return key.replace(/\s+/g, '_');
+}
 
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  statusEl.textContent = "Uploading and Analyzing...";
 
-  const resumeFile = resumeFileInput.files[0];
-  const jdFile = jdFileInput.files[0];
-  if (!resumeFile || !jdFile) {
-    statusEl.textContent = "Please select both files.";
+  statusEl.classList.remove('status-success');
+  statusEl.textContent = '';
+  resultsContainer.classList.add('placeholder');
+  resultsContainer.textContent = "Results will be shown here after analysis.";
+  resultsContainer.style.pointerEvents = 'none'; // disable interactions during upload
+
+  // Validate inputs
+  if (!resumeFileInput.files.length) {
+    statusEl.textContent = "Please upload a resume file.";
+    return;
+  }
+  if (!jdTextInput.value.trim()) {
+    statusEl.textContent = "Please enter a job description.";
     return;
   }
 
-  try {
-    const formData = new FormData();
-    formData.append('resume', resumeFile);
-    formData.append('job_description', jdFile);
+  // Check file extension
+  const file = resumeFileInput.files[0];
+  const allowedTypes = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  ];
+  if (!allowedTypes.includes(file.type)) {
+    statusEl.textContent = "Invalid resume file format. Please upload PDF or DOCX.";
+    return;
+  }
 
+  // Disable button and show spinner
+  analyzeBtn.disabled = true;
+  analyzeBtn.innerHTML = `<div class="spinner" aria-hidden="true"></div> Analyzing...`;
+
+  // Prepare form data
+  const formData = new FormData();
+  formData.append('resume', file);
+  // Instead of file for JD, send text field content as a Blob with .txt extension:
+  formData.append('job_description', new Blob([jdTextInput.value.trim()], {type: 'text/plain'}), 'job_description.txt');
+
+  try {
     const response = await fetch('/api/match-files', {
       method: 'POST',
       body: formData,
@@ -30,20 +70,29 @@ uploadForm.addEventListener('submit', async (e) => {
     }
 
     const result = await response.json();
-
-    if (result) {
-      statusEl.textContent = "Analysis complete.";
-      showResults(result);
-    } else {
-      statusEl.textContent = "No results returned from server.";
+    if (!result) {
+      throw new Error("No results returned from server.");
     }
-  } catch (error) {
-    console.error(error);
-    statusEl.textContent = "Error uploading files or processing response.";
+
+    statusEl.textContent = "Analysis complete.";
+    statusEl.classList.add('status-success');
+    resultsContainer.classList.remove('placeholder');
+    resultsContainer.style.pointerEvents = 'auto';
+
+    showResults(result);
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = err.message || "Error uploading files or processing response.";
+    resultsContainer.classList.add('placeholder');
+    resultsContainer.textContent = "Results will be shown here after analysis.";
+  } finally {
+    analyzeBtn.disabled = false;
+    analyzeBtn.textContent = "Analyze Match";
   }
 });
 
-const showResults = (results) => {
+
+function showResults(results) {
   resultsContainer.innerHTML = "";
 
   const keys = [
@@ -76,18 +125,14 @@ const showResults = (results) => {
       `;
     }
 
-    // Sanitize key for safe HTML id (replace spaces with underscores)
-    const safeKey = key.replace(/\s+/g, '_');
+    const safeKey = sanitizeKey(key);
 
-    // Determine which suggestion lists to use
-    // context and content_quality have both short_suggestions and long_suggestions
-    // others have only one suggestions list (either 'suggestions' or 'short_suggestions')
     let suggestionsHTML = "";
     let tooltipHTML = "";
 
     if ((key === "context" || key === "content quality") &&
         Array.isArray(item.short_suggestions) && item.short_suggestions.length > 0) {
-      // Context and content_quality: show short suggestions
+
       suggestionsHTML = `
         <div class="suggestions">
           <strong>Suggestions:</strong>
@@ -95,20 +140,18 @@ const showResults = (results) => {
         </div>
       `;
 
-      // Show long suggestions if exist for Details toggle
       if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
         const tid = `${safeKey}-tooltip`;
         tooltipHTML = `
           <div class="tooltip-wrapper">
-            <span class="tooltip-toggle" onclick="toggleTooltip('${tid}')">💬 Details</span>
-            <div class="tooltip-content" id="${tid}">
+            <span class="tooltip-toggle" tabindex="0" role="button" aria-expanded="false" aria-controls="${tid}" onclick="toggleTooltip('${tid}')">💬 Details</span>
+            <div class="tooltip-content" id="${tid}" role="region" aria-live="polite">
               <ul>${item.long_suggestions.map(s => `<li>${s}</li>`).join("")}</ul>
             </div>
           </div>
         `;
       }
     } else {
-      // For other sections: get suggestions either from 'suggestions' or 'short_suggestions'
       const suggestionsList = item.suggestions || item.short_suggestions;
 
       if (Array.isArray(suggestionsList) && suggestionsList.length > 0) {
@@ -118,7 +161,7 @@ const showResults = (results) => {
             <ul>${suggestionsList.map(s => `<li>${s}</li>`).join("")}</ul>
           </div>
         `;
-      } else if (typeof suggestionsList === "string") {
+      } else if (typeof suggestionsList === 'string') {
         suggestionsHTML = `
           <div class="suggestions">
             <strong>Suggestions:</strong>
@@ -126,18 +169,9 @@ const showResults = (results) => {
           </div>
         `;
       }
-      // No details toggle here since no long suggestions expected
     }
 
     card.innerHTML = header + score + suggestionsHTML + tooltipHTML + missingHTML;
     resultsContainer.appendChild(card);
   });
-};
-
-// Tooltip toggle function to show/hide details
-function toggleTooltip(id) {
-  const el = document.getElementById(id);
-  if (el) {
-    el.classList.toggle('visible');
-  }
 }
