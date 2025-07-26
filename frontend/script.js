@@ -97,6 +97,14 @@ function renderResults(results) {
   resultsContainer.innerHTML = "";
 
   const keys = ["total", "missingkeywords", "sections", "formatting", "content quality", "context"];
+  const emojiMap = {
+  total: "🎯",
+  missingkeywords: "❌",
+  sections: "📄",
+  formatting: "🛠️",
+  "content quality": "✍️",
+  context: "🧩"
+  };
 
   keys.forEach((key) => {
     const item = results[key];
@@ -105,7 +113,7 @@ function renderResults(results) {
     const card = document.createElement("div");
     card.className = "score-card";
 
-    const header = `<div class="score-header">${item.type}</div>`;
+    const header = `<div class="score-header">${emojiMap[key] || ""} ${item.type}</div>`;
     const score = `<div>Score: <span class="score-value">${item.score}</span></div>`;
 
     let missingHTML = "";
