@@ -2,44 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>ATS Resume Matcher</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="frontend/styles.css" />
+  <title>🎯 Resume-JD Matcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <h1>🎯 Resume-JD Matcher</h1>
 
-  <!-- Upload Form -->
-  <div class="card upload-card">
-    <form id="uploadForm">
-      <label>Resume:
-        <input type="file" id="resumeFile" required />
-      </label>
-      <label>Job Description:
-        <input type="file" id="jdFile" required />
-      </label>
-      <button type="submit">Analyze Match</button>
+  <div class="container">
+    <form id="uploadForm" novalidate>
+      <div class="form-group">
+        <label for="resumeFile">Upload Resume</label>
+        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" required />
+        <small class="hint-text">Only PDF or DOCX files allowed.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="jdText">Job Description</label>
+        <textarea id="jdText" placeholder="Paste the job description here..." required></textarea>
+        <small class="hint-text">Describe job expectations.</small>
+      </div>
+
+      <button type="submit" id="analyzeBtn" aria-live="polite">
+        Analyze Match
+      </button>
     </form>
-  </div>
 
-  <!-- Upload status -->
-  <div id="status"></div>
+    <div id="status" role="alert" aria-live="assertive"></div>
 
-  <!-- Summary panel -->
-  <div id="summary-panel" class="card hidden"></div>
-
-  <!-- Results -->
-  <div id="results" class="results-grid"></div>
-
-  <!-- Tooltip Modal -->
-  <div id="tooltip-modal" class="tooltip-modal hidden">
-    <div class="tooltip-content">
-      <span id="tooltip-close">&times;</span>
-      <div id="tooltip-text"></div>
+    <div id="results" class="placeholder" aria-live="polite" aria-atomic="true">
+      Results will be shown here after analysis.
     </div>
   </div>
 
-  <!-- JS -->
-  <script src="frontend/script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
