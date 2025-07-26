@@ -5,7 +5,7 @@ import csv
 import os
 from functools import lru_cache
 from sentence_transformers import SentenceTransformer
-import fuzzymatching
+from . import fuzzymatching
 
 
 # Absolute path to the CSV file
