@@ -1,142 +1,633 @@
 skill,category
 agile,technical skill
+agile methodology,technical skill
+scrum,technical skill
+scrum master,technical skill
+kanban,technical skill
+sprint planning,technical skill
+sprint review,technical skill
+retrospective,technical skill
+user stories,technical skill
+acceptance criteria,technical skill
+story points,technical skill
+velocity tracking,technical skill
+burndown charts,technical skill
+backlog management,technical skill
+product owner,technical skill
+safe,technical skill
+scaled agile,technical skill
+lean,technical skill
+waterfall,technical skill
+prince2,technical skill
+pmp,technical skill
+project management,technical skill
+product management,technical skill
+roadmap planning,technical skill
+requirements gathering,technical skill
+business analysis,technical skill
+stakeholder management,soft skill
 angular,library
+angularjs,library
+angular 2,library
+angular 4,library
+angular 8,library
+angular 12,library
+angular 15,library
+angular cli,tool
+angular material,library
+ionic,library
+rxjs,library
+ngrx,library
+typescript,programming language
+react,library
+reactjs,library
+react native,library
+nextjs,library
+next.js,library
+gatsby,library
+redux,library
+mobx,library
+context api,library
+react hooks,library
+jsx,technical skill
+styled components,library
+material ui,library
+chakra ui,library
+ant design,library
+bootstrap,library
+tailwind css,library
+vue.js,library
+vuejs,library
+vue 3,library
+vuex,library
+nuxt.js,library
+nuxtjs,library
+express,library
+express.js,library
+nestjs,library
+nest.js,library
+fastapi,library
+flask,library
+django,library
+django rest framework,library
+spring,library
+spring boot,library
+spring mvc,library
+spring security,library
+spring cloud,library
+hibernate,library
+mybatis,library
 apache airflow,tool
+airflow,tool
+luigi,tool
+prefect,tool
+dagster,tool
+apache nifi,tool
+talend,tool
+informatica,tool
+pentaho,tool
 apache kafka,technology
+kafka,technology
+rabbitmq,tool
+activemq,tool
+redis,tool
+apache pulsar,tool
+message queues,technical skill
+event streaming,technical skill
 apache spark,technology
+spark,technology
+pyspark,library
+spark sql,technical skill
+spark streaming,technical skill
+databricks,tool
 aws,technology
+amazon web services,technology
+aws ec2,tool
+aws s3,tool
+aws lambda,tool
 aws emr,tool
 aws glue,tool
 aws redshift,tool
+aws rds,tool
+aws dynamodb,tool
+aws sqs,tool
+aws sns,tool
+aws kinesis,tool
+aws cloudformation,tool
+aws iam,tool
+aws vpc,tool
+aws cloudwatch,tool
+aws ecs,tool
+aws eks,tool
+aws fargate,tool
+aws codepipeline,tool
+aws codebuild,tool
+aws codedeploy,tool
 azure,technology
+microsoft azure,technology
+azure data factory,tool
+azure synapse,tool
 azure data lake storage,tool
-batch data processing,technical skill
-c#,programming language
-c-sharp,programming language
-c++,programming language
-c plus plus,programming language
-cassandra,tool
-ci/cd,tool
-continuous integration,tool
-continuous delivery,tool
-collaboration,soft skill
-communication,soft skill
-containerization,technical skill
-css,programming language
-cascading style sheets,programming language
-data analysis,technical skill
-data governance,technical skill
-data integration,technical skill
-data lake,technology
-data modeling,technical skill
-data quality management,technical skill
-data security,technical skill
-data validation,technical skill
-data visualization,technical skill
-data warehousing,technical skill
-distributed systems,technical skill
-django,library
-docker,tool
-dynamodb,tool
-elt,technical skill
-etl,technical skill
-express,library
-flask,library
+azure blob storage,tool
+azure sql database,tool
+azure functions,tool
+azure devops,tool
+azure kubernetes service,tool
+azure container registry,tool
+azure active directory,tool
+azure monitor,tool
 gcp,technology
 google cloud platform,technology
 gcp bigquery,tool
-git,tool
-github,tool
-go,programming language
-golang,programming language
-graphql,technology
-hadoop,technology
-html,programming language
-html5,programming language
-java,programming language
-javascript,programming language
-js,programming language
+google bigquery,tool
+gcp dataflow,tool
+google dataflow,tool
+gcp pub/sub,tool
+google pub/sub,tool
+gcp cloud functions,tool
+google cloud functions,tool
+gcp compute engine,tool
+gcp kubernetes engine,tool
+gcp cloud storage,tool
+google cloud storage,tool
+gcp dataproc,tool
+google dataproc,tool
+gcp firebase,tool
+batch data processing,technical skill
+stream processing,technical skill
+streaming data processing,technical skill
+real time processing,technical skill
+near real time processing,technical skill
+c#,programming language
+c-sharp,programming language
+.net,library
+dotnet,library
+.net core,library
+.net framework,library
+asp.net,library
+asp.net core,library
+entity framework,library
+linq,technical skill
+wpf,library
+winforms,library
+xamarin,library
+blazor,library
+c++,programming language
+c plus plus,programming language
+cpp,programming language
+stl,library
+boost,library
+qt,library
+opencv,library
+c,programming language
+cassandra,tool
+apache cassandra,tool
+scylla,tool
+couchbase,tool
+hbase,tool
+ci/cd,technical skill
+continuous integration,technical skill
+continuous delivery,technical skill
+continuous deployment,technical skill
 jenkins,tool
-jira,tool
-junit,tool
-kubernetes,tool
+jenkins pipeline,tool
+gitlab ci,tool
+github actions,tool
+circleci,tool
+travis ci,tool
+azure devops,tool
+bamboo,tool
+teamcity,tool
+github,tool
+gitlab,tool
+bitbucket,tool
+version control,technical skill
+git,tool
+svn,tool
+mercurial,tool
+perforce,tool
+git flow,technical skill
+branching strategy,technical skill
+pull requests,technical skill
+code review,technical skill
+collaboration,soft skill
+teamwork,soft skill
+communication,soft skill
+verbal communication,soft skill
+written communication,soft skill
+presentation,soft skill
+public speaking,soft skill
+active listening,soft skill
+conflict resolution,soft skill
+negotiation,soft skill
 leadership,soft skill
-less,programming language
-linux,technical skill
-luigi,tool
-matplotlib,library
-mongodb,tool
-mysql,tool
-node.js,library
-nodejs,library
-numpy,library
-oracle,tool
-pandas,library
-php,programming language
-postgresql,tool
-power bi,tool
-powerbi,tool
+team leadership,soft skill
+mentoring,soft skill
+coaching,soft skill
 problem solving,soft skill
-pytest,tool
-python,programming language
-pytorch,library
-react,library
-redis,tool
-rest api,technology
-rest api development,technical skill
-ruby,programming language
+critical thinking,soft skill
+analytical thinking,soft skill
+decision making,soft skill
+creativity,soft skill
+innovation,soft skill
+adaptability,soft skill
+flexibility,soft skill
+time management,soft skill
+prioritization,soft skill
+organization,soft skill
+attention to detail,soft skill
+containerization,technical skill
+docker,tool
+podman,tool
+containerd,tool
+kubernetes,tool
+k8s,tool
+helm,tool
+istio,tool
+openshift,tool
+docker compose,tool
+docker swarm,tool
+container orchestration,technical skill
+microservices,technical skill
+monolith,technical skill
+service mesh,technical skill
+css,programming language
+css3,programming language
+cascading style sheets,programming language
 sass,programming language
 scss,programming language
-scala,programming language
-scikit-learn,library
-scipy, library
-scrum,technical skill
-seaborn,library
-selenium,tool
-spring,library
-sql,technical skill
+less,programming language
+stylus,programming language
+postcss,tool
+flexbox,technical skill
+css grid,technical skill
+responsive design,technical skill
+mobile first,technical skill
+cross browser compatibility,technical skill
+web accessibility,technical skill
+wcag,technical skill
+data analysis,technical skill
+data analytics,technical skill
+business intelligence,technical skill
+data science,technical skill
+statistical analysis,technical skill
+quantitative analysis,technical skill
+qualitative analysis,technical skill
+data storytelling,technical skill
+data governance,technical skill
+data lineage,technical skill
+data catalog,technical skill
+master data management,technical skill
+data integration,technical skill
+data federation,technical skill
+data virtualization,technical skill
+data lake,technology
+data lakehouse,technology
+data mesh,technical skill
+data modeling,technical skill
+dimensional modeling,technical skill
+star schema,technical skill
+snowflake schema,technical skill
+data vault,technical skill
+normalization,technical skill
+denormalization,technical skill
+data quality management,technical skill
+data profiling,technical skill
+data cleansing,technical skill
+data validation,technical skill
+data security,technical skill
+data privacy,technical skill
+gdpr,technical skill
+ccpa,technical skill
+hipaa,technical skill
+pii,technical skill
+data encryption,technical skill
+data visualization,technical skill
+dashboards,technical skill
+reports,technical skill
+data warehousing,technical skill
+olap,technical skill
+oltp,technical skill
+etl,technical skill
+elt,technical skill
+data pipelines,technical skill
+data ingestion,technical skill
+batch processing,technical skill
+stream processing,technical skill
+change data capture,technical skill
+cdc,technical skill
+distributed systems,technical skill
+system design,technical skill
+architecture design,technical skill
+scalability,technical skill
+high availability,technical skill
+fault tolerance,technical skill
+load balancing,technical skill
+caching,technical skill
+cdn,technical skill
+content delivery network,technical skill
+dynamodb,tool
+mongodb,tool
+postgresql,tool
+postgres,tool
+mysql,tool
+mariadb,tool
+oracle,tool
+oracle database,tool
 sql server,tool
+microsoft sql server,tool
 sqlite,tool
-streaming data processing,technical skill
-swift,programming language
-tableau,tool
-teamwork,soft skill
-tensorflow,library
-typescript,programming language
-unit testing,technical skill
-unix,technical skill
-vue.js,library
-vuejs,library
-bash,programming language
-shell scripting,technical skill
-power shell,programming language
-zsh,programming language
+h2,tool
+redis,tool
+memcached,tool
+elasticsearch,tool
+solr,tool
+neo4j,tool
+graph databases,technical skill
+nosql,technical skill
+newsql,technical skill
+go,programming language
+golang,programming language
+goroutines,technical skill
+channels,technical skill
+gin,library
+echo,library
+fiber,library
+graphql,technology
+rest api,technology
 restful api,technology
-microservices,technical skill
+soap,technology
 grpc,technology
+api design,technical skill
 api development,technical skill
-oop,technical skill
-object oriented programming,technical skill
-functional programming,technical skill
-design patterns,technical skill
-mvc,technical skill
 api testing,technical skill
-postman,tool
-swagger,tool
+api documentation,technical skill
 openapi,tool
+swagger,tool
+postman,tool
+insomnia,tool
+hadoop,technology
+hdfs,technical skill
+mapreduce,technical skill
+yarn,tool
+hive,tool
+pig,tool
+impala,tool
+cloudera,tool
+hortonworks,tool
+ambari,tool
+html,programming language
+html5,programming language
+semantic html,technical skill
+web standards,technical skill
+dom,technical skill
+web components,technical skill
+shadow dom,technical skill
+java,programming language
+java 8,programming language
+java 11,programming language
+java 17,programming language
+java 21,programming language
+jvm,technology
+jdk,tool
+maven,tool
+gradle,tool
+ant,tool
+junit,tool
+testng,tool
+mockito,tool
+spring,library
+spring boot,library
+spring data,library
+spring security,library
+spring cloud,library
+hibernate,library
+jpa,technical skill
+jdbc,technical skill
+servlet,technical skill
+jsp,technical skill
+jsf,library
+struts,library
+javascript,programming language
+js,programming language
+es6,programming language
+es2015,programming language
+es2020,programming language
+vanilla javascript,programming language
+dom manipulation,technical skill
+ajax,technical skill
+fetch api,technical skill
+promises,technical skill
+async await,technical skill
+callbacks,technical skill
+closures,technical skill
+prototypes,technical skill
+event handling,technical skill
+json,technical skill
+xml,technical skill
+yaml,technical skill
+jenkins,tool
+jenkins pipeline,tool
+gitlab ci/cd,tool
+github actions,tool
+azure pipelines,tool
+bamboo,tool
+circleci,tool
+travis ci,tool
+drone,tool
+buildkite,tool
+jira,tool
+confluence,tool
+trello,tool
+asana,tool
+monday.com,tool
+notion,tool
+slack,tool
+microsoft teams,tool
+zoom,tool
+miro,tool
+figma,tool
+sketch,tool
+invision,tool
+zeplin,tool
+junit,tool
+testng,tool
+pytest,tool
+unittest,tool
+jest,tool
+mocha,tool
+jasmine,tool
+cypress,tool
+selenium,tool
+playwright,tool
+puppeteer,tool
 test automation,technical skill
+unit testing,technical skill
+integration testing,technical skill
+end to end testing,technical skill
+api testing,technical skill
+performance testing,technical skill
+load testing,technical skill
+stress testing,technical skill
+security testing,technical skill
+penetration testing,technical skill
+vulnerability assessment,technical skill
 test driven development,technical skill
 tdd,technical skill
 behavior driven development,technical skill
 bdd,technical skill
-pytest,tool
-unittest,tool
 cucumber,tool
+gherkin,technical skill
 robot framework,tool
 jmeter,tool
 gatling,tool
-load testing,technical skill
-performance testing,technical skill
+k6,tool
+locust,tool
+linux,technical skill
+unix,technical skill
+ubuntu,technical skill
+centos,technical skill
+rhel,technical skill
+debian,technical skill
+fedora,technical skill
+bash,programming language
+shell scripting,technical skill
+zsh,programming language
+fish,programming language
+power shell,programming language
+powershell,programming language
+cmd,technical skill
+cron,technical skill
+systemd,technical skill
+nginx,tool
+apache,tool
+apache httpd,tool
+tomcat,tool
+jetty,tool
+iis,tool
+load balancer,tool
+reverse proxy,technical skill
+matplotlib,library
+seaborn,library
+plotly,library
+bokeh,library
+altair,library
+ggplot2,library
+tableau,tool
+power bi,tool
+powerbi,tool
+qlik,tool
+looker,tool
+google data studio,tool
+grafana,tool
+kibana,tool
+superset,tool
+metabase,tool
+numpy,library
+pandas,library
+scipy,library
+scikit-learn,library
+sklearn,library
+tensorflow,library
+keras,library
+pytorch,library
+jax,library
+hugging face,library
+transformers,library
+spacy,library
+nltk,library
+gensim,library
+opencv,library
+pillow,library
+node.js,library
+nodejs,library
+npm,tool
+yarn,tool
+pnpm,tool
+webpack,tool
+vite,tool
+rollup,tool
+parcel,tool
+gulp,tool
+grunt,tool
+babel,tool
+eslint,tool
+prettier,tool
+php,programming language
+laravel,library
+symfony,library
+codeigniter,library
+zend,library
+cakephp,library
+wordpress,tool
+drupal,tool
+magento,tool
+composer,tool
+python,programming language
+python 3,programming language
+pip,tool
+conda,tool
+virtualenv,tool
+poetry,tool
+jupyter,tool
+jupyter notebook,tool
+ipython,tool
+pycharm,tool
+vs code,tool
+visual studio code,tool
+vim,tool
+emacs,tool
+sublime text,tool
+atom,tool
+intellij idea,tool
+eclipse,tool
+netbeans,tool
+ruby,programming language
+ruby on rails,library
+rails,library
+sinatra,library
+rspec,tool
+minitest,tool
+bundler,tool
+gem,tool
+rbenv,tool
+rvm,tool
+scala,programming language
+akka,library
+play framework,library
+sbt,tool
+spark,library
+kafka streams,library
+swift,programming language
+swiftui,library
+uikit,library
+xcode,tool
+ios development,technical skill
+objective-c,programming language
+kotlin,programming language
+android development,technical skill
+android studio,tool
+flutter,library
+dart,programming language
+react native,library
+xamarin,library
+cordova,tool
+phonegap,tool
+sql,technical skill
+mysql,tool
+postgresql,tool
+sqlite,tool
+oracle,tool
+sql server,tool
+t-sql,technical skill
+pl/sql,technical skill
+stored procedures,technical skill
+triggers,technical skill
+views,technical skill
+indexes,technical skill
+query optimization,technical skill
+database design,technical skill
+er diagrams,technical skill
 splunk,tool
 datadog,tool
 new relic,tool
@@ -146,100 +637,269 @@ elk stack,tool
 elasticsearch,tool
 logstash,tool
 kibana,tool
-airflow,tool
-ansible,tool
-terraform,tool
-cloudformation,tool
-jenkins pipeline,tool
-circleci,tool
-travis ci,tool
-bitbucket,tool
-jira,tool
-confluence,tool
-asana,tool
-notion,tool
-trello,tool
-markdown,technical skill
-yaml,technical skill
-json,technical skill
-xml,technical skill
-csv,technical skill
-version control,technical skill
-gitlab,tool
-svn,tool
-mercurial,tool
-monorepo,technical skill
-multi-repo,technical skill
-continuous deployment,technical skill
-continuous monitoring,technical skill
+fluentd,tool
+beats,tool
+jaeger,tool
+zipkin,tool
 observability,technical skill
+monitoring,technical skill
+logging,technical skill
+tracing,technical skill
+metrics,technical skill
+alerting,technical skill
 incident management,technical skill
 incident response,technical skill
-devops,technical skill
-site reliability engineering,technical skill
+on-call,technical skill
 sre,technical skill
+site reliability engineering,technical skill
+chaos engineering,technical skill
+disaster recovery,technical skill
+business continuity,technical skill
+ansible,tool
+terraform,tool
+pulumi,tool
+cloudformation,tool
+arm templates,tool
+infrastructure as code,technical skill
+iac,technical skill
+configuration management,technical skill
+orchestration,technical skill
+provisioning,technical skill
+devops,technical skill
+platform engineering,technical skill
+cloud native,technical skill
+12 factor app,technical skill
+markdown,technical skill
+restructuredtext,technical skill
+asciidoc,technical skill
+latex,technical skill
+technical writing,technical skill
+documentation,technical skill
+api documentation,technical skill
+user guides,technical skill
+runbooks,technical skill
+monorepo,technical skill
+multi-repo,technical skill
+lerna,tool
+nx,tool
+rush,tool
+turborepo,tool
+workspace,technical skill
+package management,technical skill
+dependency management,technical skill
+continuous monitoring,technical skill
+continuous testing,technical skill
+shift left testing,technical skill
+security scanning,technical skill
+static code analysis,technical skill
+code quality,technical skill
+sonarqube,tool
+code climate,tool
+codacy,tool
+veracode,tool
+checkmarx,tool
 it automation,technical skill
+rpa,technical skill
+robotic process automation,technical skill
+uipath,tool
+automation anywhere,tool
+blue prism,tool
 security compliance,technical skill
+soc 2,technical skill
+iso 27001,technical skill
+nist,technical skill
+cis controls,technical skill
+owasp,technical skill
+pci dss,technical skill
 iam,technical skill
 identity and access management,technical skill
+rbac,technical skill
+role based access control,technical skill
+abac,technical skill
+attribute based access control,technical skill
+multi factor authentication,technical skill
+mfa,technical skill
 network security,technical skill
+firewall,technical skill
+vpn,technical skill
+intrusion detection,technical skill
+ids,technical skill
+intrusion prevention,technical skill
+ips,technical skill
 threat modeling,technical skill
+risk assessment,technical skill
+vulnerability management,technical skill
 encryption,technical skill
+cryptography,technical skill
+pki,technical skill
+public key infrastructure,technical skill
 ssl,technical skill
 tls,technical skill
+https,technical skill
+certificates,technical skill
 sso,technical skill
 single sign on,technical skill
 oauth,technical skill
+oauth 2.0,technical skill
+openid connect,technical skill
 saml,technical skill
+jwt,technical skill
+json web tokens,technical skill
+ldap,technical skill
+active directory,technical skill
 api gateway,tool
 kong,tool
-aws lambda,tool
+aws api gateway,tool
+azure api management,tool
+ambassador,tool
+envoy,tool
+traefik,tool
+haproxy,tool
 cloud functions,tool
 serverless,technical skill
+faas,technical skill
+function as a service,technical skill
+event driven architecture,technical skill
+lambda architecture,technical skill
+kappa architecture,technical skill
 big data,technology
 data engineering,technical skill
+data architecture,technical skill
+data strategy,technical skill
+data ops,technical skill
+dataops,technical skill
 mlops,technical skill
+ml engineering,technical skill
 model deployment,technical skill
 model monitoring,technical skill
+model versioning,technical skill
 experiment tracking,technical skill
+feature store,technical skill
+ab testing,technical skill
 mlflow,tool
 kubeflow,tool
-databricks,tool
+airflow,tool
+prefect,tool
+dvc,tool
+weights and biases,tool
+neptune,tool
+comet,tool
 snowflake,tool
 redshift,tool
+bigquery,tool
 athena,tool
 presto,tool
 trino,tool
 clickhouse,tool
-google data studio,tool
-looker,tool
-business intelligence,technical skill
+vertica,tool
+teradata,tool
+greenplum,tool
+data bricks,tool
+synapse,tool
 data pipelines,technical skill
-data ingestion,technical skill
 data wrangling,technical skill
+data cleaning,technical skill
 feature engineering,technical skill
+feature selection,technical skill
+data preprocessing,technical skill
+data transformation,technical skill
 nlp,technical skill
 natural language processing,technical skill
+text mining,technical skill
+sentiment analysis,technical skill
+named entity recognition,technical skill
+ner,technical skill
+part of speech tagging,technical skill
+pos tagging,technical skill
+topic modeling,technical skill
+text classification,technical skill
+language models,technical skill
+llm,technical skill
+large language models,technical skill
+gpt,technical skill
+bert,technical skill
+transformer,technical skill
 computer vision,technical skill
+image processing,technical skill
+object detection,technical skill
+image classification,technical skill
+face recognition,technical skill
+ocr,technical skill
+optical character recognition,technical skill
+cnn,technical skill
+convolutional neural networks,technical skill
 deep learning,technical skill
+neural networks,technical skill
+artificial neural networks,technical skill
 machine learning,technical skill
+ml,technical skill
 supervised learning,technical skill
 unsupervised learning,technical skill
+semi supervised learning,technical skill
 reinforcement learning,technical skill
+transfer learning,technical skill
+ensemble methods,technical skill
+random forest,technical skill
+gradient boosting,technical skill
+xgboost,library
+lightgbm,library
+catboost,library
+linear regression,technical skill
+logistic regression,technical skill
+decision trees,technical skill
+support vector machines,technical skill
+svm,technical skill
+k means,technical skill
+clustering,technical skill
+classification,technical skill
+regression,technical skill
+dimensionality reduction,technical skill
+pca,technical skill
+principal component analysis,technical skill
 statistics,technical skill
+statistical analysis,technical skill
+descriptive statistics,technical skill
+inferential statistics,technical skill
+hypothesis testing,technical skill
 probability,technical skill
+probability distributions,technical skill
+bayesian statistics,technical skill
 time series,technical skill
+time series analysis,technical skill
 forecasting,technical skill
+arima,technical skill
+prophet,library
+seasonal decomposition,technical skill
+trend analysis,technical skill
 data mining,technical skill
-data cleaning,technical skill
+pattern recognition,technical skill
+anomaly detection,technical skill
+outlier detection,technical skill
 eda,technical skill
 exploratory data analysis,technical skill
-kanban,technical skill
-agile methodology,technical skill
-scrum master,technical skill
-product management,technical skill
-stakeholder management,soft skill
-mentoring,soft skill
-presentation,soft skill
-public speaking,soft skill
-
+data profiling,technical skill
+correlation analysis,technical skill
+regression analysis,technical skill
+a/b testing,technical skill
+experimental design,technical skill
+causal inference,technical skill
+r,programming language
+rstudio,tool
+shiny,library
+dplyr,library
+ggplot2,library
+tidyverse,library
+caret,library
+matlab,programming language
+simulink,tool
+sas,programming language
+spss,tool
+stata,tool
+excel,tool
+google sheets,tool
+vba,programming language
+power query,tool
+power pivot,tool
+dax,technical skill
+measure,technical skill
+calculated columns,technical skill
