@@ -6,7 +6,7 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   padding: 20px;
   color: #2d3748;
@@ -22,13 +22,14 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.08;
   background-image: 
-    radial-gradient(circle at 25% 25%, #4a5568 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, #2d3748 2px, transparent 2px),
-    radial-gradient(circle at 50% 50%, #718096 1px, transparent 1px);
-  background-size: 150px 150px, 200px 200px, 100px 100px;
-  animation: float 25s ease-in-out infinite;
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.8) 2px, transparent 2px),
+    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.6) 2px, transparent 2px),
+    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.4) 1px, transparent 1px),
+    radial-gradient(circle at 60% 20%, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 120px 120px, 160px 160px, 80px 80px, 100px 100px;
+  animation: float 30s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -47,18 +48,23 @@ body {
 .header h1 {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
-  color: #2d3748;
+  color: white;
   margin-bottom: 12px;
-  text-shadow: 0 2px 10px rgba(45, 55, 72, 0.15);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(45deg, #ffffff, #f0f8ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header p {
-  color: #4a5568;
+  color: rgba(255, 255, 255, 0.95);
   font-size: 1.2rem;
   font-weight: 400;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .container {
@@ -157,6 +163,22 @@ form#uploadForm {
   background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
   color: #22543d;
   border-style: solid;
+  animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7);
+  }
+  70% {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 10px rgba(72, 187, 120, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+  }
 }
 
 .upload-icon {
@@ -194,7 +216,7 @@ form#uploadForm {
 }
 
 button[type="submit"] {
-  background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   padding: 16px 48px;
@@ -203,7 +225,7 @@ button[type="submit"] {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
   position: relative;
   overflow: hidden;
 }
@@ -225,7 +247,7 @@ button[type="submit"]:hover::before {
 
 button[type="submit"]:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(66, 153, 225, 0.5);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
 }
 
 button[type="submit"]:disabled {

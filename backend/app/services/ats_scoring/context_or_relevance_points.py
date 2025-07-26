@@ -102,8 +102,8 @@ def keyword_context_points(sections: dict, jd_keywords: list, max_points=10) -> 
 
     if found_in_context:
         detailed_feedback.append(
-        f"You’ve placed these skills directly into Experience or Projects: `{', '.join(sorted(found_in_context))}`. "
-        "That’s excellent — it shows practical application, not just familiarity."
+        f"You've placed these skills directly into Experience or Projects: `{', '.join(sorted(found_in_context))}`. "
+        "That's excellent — it shows practical application, not just familiarity."
     )
     if not found_in_context and not found_in_skills:
         detailed_feedback.append(

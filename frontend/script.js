@@ -17,32 +17,104 @@ const analyzeBtn = document.getElementById('analyzeBtn');
 resumeFileInput.addEventListener('change', function(e) {
   const button = document.getElementById('resumeButton');
   const fileName = document.getElementById('resumeFileName');
+  const uploadIcon = button.querySelector('.upload-icon');
   
   if (e.target.files.length > 0) {
     button.classList.add('has-file');
     fileName.textContent = e.target.files[0].name;
-    button.querySelector('.upload-icon').textContent = '✅';
+    uploadIcon.textContent = '✅';
+    
+    // Add success animation
+    button.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 200);
   } else {
     button.classList.remove('has-file');
     fileName.textContent = '';
-    button.querySelector('.upload-icon').textContent = '📄';
+    uploadIcon.textContent = '📄';
   }
 });
 
 jdFileInput.addEventListener('change', function(e) {
   const button = document.getElementById('jdButton');
   const fileName = document.getElementById('jdFileName');
+  const uploadIcon = button.querySelector('.upload-icon');
   
   if (e.target.files.length > 0) {
     button.classList.add('has-file');
     fileName.textContent = e.target.files[0].name;
-    button.querySelector('.upload-icon').textContent = '✅';
+    uploadIcon.textContent = '✅';
+    
+    // Add success animation
+    button.style.transform = 'scale(1.02)';
+    setTimeout(() => {
+      button.style.transform = '';
+    }, 200);
   } else {
     button.classList.remove('has-file');
     fileName.textContent = '';
-    button.querySelector('.upload-icon').textContent = '📋';
+    uploadIcon.textContent = '📋';
   }
 });
+
+// Add click handlers for file input buttons
+document.getElementById('resumeButton').addEventListener('click', function() {
+  resumeFileInput.click();
+});
+
+document.getElementById('jdButton').addEventListener('click', function() {
+  jdFileInput.click();
+});
+
+// Add drag and drop functionality
+function setupDragAndDrop(buttonId, inputId) {
+  const button = document.getElementById(buttonId);
+  const input = document.getElementById(inputId);
+  
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    button.addEventListener(eventName, preventDefaults, false);
+  });
+  
+  function preventDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  ['dragenter', 'dragover'].forEach(eventName => {
+    button.addEventListener(eventName, highlight, false);
+  });
+  
+  ['dragleave', 'drop'].forEach(eventName => {
+    button.addEventListener(eventName, unhighlight, false);
+  });
+  
+  function highlight(e) {
+    button.style.borderColor = '#4299e1';
+    button.style.backgroundColor = '#ebf8ff';
+  }
+  
+  function unhighlight(e) {
+    button.style.borderColor = '';
+    button.style.backgroundColor = '';
+  }
+  
+  button.addEventListener('drop', handleDrop, false);
+  
+  function handleDrop(e) {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    
+    if (files.length > 0) {
+      input.files = files;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  }
+}
+
+// Initialize drag and drop for both file inputs
+setupDragAndDrop('resumeButton', 'resumeFile');
+setupDragAndDrop('jdButton', 'jdFile');
 
 // Sanitize object key
 function sanitizeKey(key) {
