@@ -35,7 +35,7 @@ def load_skill_set(csv_path):
 SKILL_SET = load_skill_set(csv_path)
 
 
-def extract_relevant_skills_and_keywords(text, top_n=500) -> set[str]:
+def extract_relevant_skills_and_keywords(text, top_n=75) -> set[str]:
     """
     Extracts relevant skills and keywords from text using both a curated skills dictionary
     and KeyBERT for context-aware phrase extraction.
