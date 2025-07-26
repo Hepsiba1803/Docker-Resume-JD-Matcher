@@ -28,10 +28,7 @@ def formatting_score_and_suggestions(resume: UploadFile) -> tuple:
     # ----------- FILE NAME CHECK -----------
     if not SIMPLE_FILENAME_RE.match(resume_name):
         deductions += 1
-        feedback.append({
-            "short": "Rename the file to avoid special characters or spaces.",
-            "long": "Rename your file using only alphabets, numbers, underscores, or dashes. For example: 'JohnDoe_Resume.docx'."
-        })
+        feedback.append("• Rename your file using only letters, numbers, underscores, or dashes. Example: yourname_Resume.docx")
 
     # ----------- PDF HANDLING -----------
     if resume.content_type == 'application/pdf' or resume_name.lower().endswith('.pdf'):
@@ -145,17 +142,11 @@ def formatting_score_and_suggestions(resume: UploadFile) -> tuple:
             pass
 
         if header_footer_text_found:
-            feedback.append({
-                "short": "Avoid placing key info in headers or footers.",
-                "long": "Keep crucial info out of headers and footers. ATS tools sometimes skip these sections altogether."
-            })
+           feedback.append("Important content should be in the body — ATS may skip headers/footers.")
+
 
     # ----------- FINAL SCORING -----------
     formatting_points = max(max_points - deductions, 0)
     if not feedback:
-        feedback.append({
-            "short": "Your formatting is clean and ATS-friendly.",
-            "long": "Great job! Your resume formatting looks clean, consistent, and ready for ATS scanning."
-        })
-
+        feedback.append("✅ Well done! Your resume formatting is clean and ATS-friendly.")
     return (formatting_points, feedback)
