@@ -6,7 +6,7 @@ const resultsContainer = document.getElementById('results');
 
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  statusEl.textContent = "Uploading...";
+  statusEl.textContent = "Uploading and Analyzing...";
 
   const resumeFile = resumeFileInput.files[0];
   const jdFile = jdFileInput.files[0];
@@ -76,6 +76,9 @@ const showResults = (results) => {
       `;
     }
 
+    // Sanitize key for safe HTML id (replace spaces with underscores)
+    const safeKey = key.replace(/\s+/g, '_');
+
     // Determine which suggestion lists to use
     // context and content_quality have both short_suggestions and long_suggestions
     // others have only one suggestions list (either 'suggestions' or 'short_suggestions')
@@ -94,7 +97,7 @@ const showResults = (results) => {
 
       // Show long suggestions if exist for Details toggle
       if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
-        const tid = `${key}-tooltip`;
+        const tid = `${safeKey}-tooltip`;
         tooltipHTML = `
           <div class="tooltip-wrapper">
             <span class="tooltip-toggle" onclick="toggleTooltip('${tid}')">💬 Details</span>
@@ -130,10 +133,11 @@ const showResults = (results) => {
     resultsContainer.appendChild(card);
   });
 };
+
+// Tooltip toggle function to show/hide details
 function toggleTooltip(id) {
   const el = document.getElementById(id);
   if (el) {
     el.classList.toggle('visible');
   }
 }
-
