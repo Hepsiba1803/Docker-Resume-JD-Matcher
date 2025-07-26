@@ -41,7 +41,7 @@ async def create_match_analysis(
     formatting_score, formatting_feedback = formatting_points.formatting_score_and_suggestions(resume)
 
     # context or relevance score and feedback
-    context_score, context_short_feedback,context_detailed_feedback= context_or_relevance_points.analyze_resume_context(sections, jd_keywords)
+    context_score, context_short_feedback,context_detailed_feedback= context_or_relevance_points.analyze_resume_context(resume_text, jd_keywords)
 
     overall_score = keyword_score + section_score + content_quality_score + formatting_score + context_score
 
