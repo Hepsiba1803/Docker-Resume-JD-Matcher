@@ -250,9 +250,7 @@ def extract_relevant_skills_and_keywords(text: str, top_n: int = 75) -> Set[str]
         
         # Ensure we have skills loaded
         if not SKILL_SET:
-            logger.warning("No skills loaded, attempting to reload")
-            global SKILL_SET
-            SKILL_SET = load_skill_set(csv_path)
+            raise RuntimeError("Skills dataset not loaded. Check CSV file path and format.")
         
         # Extract keywords using KeyBERT with error handling
         try:
