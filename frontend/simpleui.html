@@ -8,7 +8,6 @@
 </head>
 <body>
   <h1>🎯 Resume-JD Matcher</h1>
-
   <div class="container">
     <form id="uploadForm" novalidate>
       <div class="form-group">
@@ -18,12 +17,12 @@
       </div>
 
       <div class="form-group">
-        <label for="jdText">Job Description</label>
-        <textarea id="jdText" placeholder="Paste the job description here..." required></textarea>
-        <small class="hint-text">Describe job expectations.</small>
+        <label for="jdFile">Upload Job Description</label>
+        <input type="file" id="jdFile" accept=".pdf,.doc,.docx" required />
+        <small class="hint-text">Only PDF or DOCX files allowed.</small>
       </div>
 
-      <button type="submit" id="analyzeBtn" aria-live="polite">
+      <button type="submit" id="analyzeBtn">
         Analyze Match
       </button>
     </form>
