@@ -15,8 +15,8 @@ def section_completion(resume_text: str):
         "profile": [r"profile", r"summary", r"professional summary", r"about me", r"objective"],
         "education": [r"education", r"academic background", r"educational qualification"],
         "experience": [r"experience", r"work experience", r"professional experience", r"employment history"],
-        "skills": [r"skills", r"technical skills", r"core competencies"],
-        "projects": [r"projects", r"project experience"],
+        "skills": [r"skills", r"technical skills", r"core competencies" ,r"skill summary"],
+        "projects": [r"projects", r"project experience",r"project"],
         "certifications": [r"certifications", r"certificates"],
     }
 

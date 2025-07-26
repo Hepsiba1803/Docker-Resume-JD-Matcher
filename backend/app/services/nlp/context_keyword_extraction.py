@@ -17,7 +17,7 @@ nlp = spacy.load('en_core_web_sm')
 @lru_cache(maxsize=1)
 
 def get_kw_model():
-    local_model_path = "local_models/intfloat-e5-small-v2"
+    local_model_path = "local_models/all-MiniLM-L6-v2"
     model = SentenceTransformer(local_model_path)
     return KeyBERT(model)
 
