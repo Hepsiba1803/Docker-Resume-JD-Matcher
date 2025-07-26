@@ -1,5 +1,47 @@
-const resultsContainer = document.getElementById("results");
-const statusEl = document.getElementById("status");
+const uploadForm = document.getElementById('uploadForm');
+const resumeFileInput = document.getElementById('resumeFile');
+const jdFileInput = document.getElementById('jdFile');
+const statusEl = document.getElementById('status');
+const resultsContainer = document.getElementById('results');
+
+uploadForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  statusEl.textContent = "Uploading...";
+
+  const resumeFile = resumeFileInput.files[0];
+  const jdFile = jdFileInput.files[0];
+  if (!resumeFile || !jdFile) {
+    statusEl.textContent = "Please select both files.";
+    return;
+  }
+
+  try {
+    const formData = new FormData();
+    formData.append('resume', resumeFile);
+    formData.append('job_description', jdFile);
+
+    const response = await fetch('/match-files', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Upload failed with status ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result) {
+      statusEl.textContent = "Analysis complete.";
+      showResults(result);
+    } else {
+      statusEl.textContent = "No results returned from server.";
+    }
+  } catch (error) {
+    console.error(error);
+    statusEl.textContent = "Error uploading files or processing response.";
+  }
+});
 
 const showResults = (results) => {
   resultsContainer.innerHTML = "";
@@ -9,7 +51,7 @@ const showResults = (results) => {
     "missingkeywords",
     "sections",
     "formatting",
-    "content_quality",
+    "content quality",
     "context",
   ];
 
