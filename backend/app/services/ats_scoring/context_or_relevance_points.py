@@ -86,6 +86,70 @@ def normalize_section_name(section_name: str) -> str:
     else:
         return section_name
 
+def is_soft_skill(keyword: str) -> bool:
+    """
+    Check if a keyword is a soft skill.
+    
+    Args:
+        keyword (str): The keyword to check
+        
+    Returns:
+        bool: True if it's a soft skill, False otherwise
+    """
+    soft_skills = {
+        'communication', 'collaboration', 'leadership', 'teamwork', 'problem solving',
+        'critical thinking', 'analytical thinking', 'decision making', 'creativity',
+        'innovation', 'adaptability', 'flexibility', 'time management', 'prioritization',
+        'organization', 'attention to detail', 'stakeholder management', 'verbal communication',
+        'written communication', 'presentation', 'public speaking', 'active listening',
+        'conflict resolution', 'negotiation', 'team leadership', 'mentoring', 'coaching',
+        'project management', 'product management', 'business analysis', 'requirements gathering'
+    }
+    return keyword.lower().strip() in soft_skills
+
+def get_soft_skill_suggestions(missing_soft_skills: Set[str]) -> List[str]:
+    """
+    Generate contextual suggestions for soft skills.
+    
+    Args:
+        missing_soft_skills (set): Set of missing soft skills
+        
+    Returns:
+        list: List of suggestions for incorporating soft skills
+    """
+    suggestions = []
+    
+    # Group soft skills by type for better suggestions
+    skill_groups = {
+        'communication': ['communication', 'verbal communication', 'written communication', 'presentation', 'public speaking'],
+        'leadership': ['leadership', 'team leadership', 'mentoring', 'coaching'],
+        'collaboration': ['collaboration', 'teamwork', 'stakeholder management', 'conflict resolution', 'negotiation'],
+        'analytical': ['problem solving', 'critical thinking', 'analytical thinking', 'decision making'],
+        'management': ['time management', 'prioritization', 'organization', 'project management', 'product management'],
+        'creativity': ['creativity', 'innovation', 'adaptability', 'flexibility'],
+        'business': ['business analysis', 'requirements gathering', 'attention to detail']
+    }
+    
+    for group, skills in skill_groups.items():
+        missing_in_group = [skill for skill in missing_soft_skills if skill in skills]
+        if missing_in_group:
+            if group == 'communication':
+                suggestions.append("💬 Demonstrate communication skills through examples like 'Presented technical solutions to stakeholders', 'Documented system architecture', or 'Facilitated cross-team meetings'")
+            elif group == 'leadership':
+                suggestions.append("👥 Show leadership through examples like 'Led a team of X developers', 'Mentored junior developers', or 'Drove technical decisions across teams'")
+            elif group == 'collaboration':
+                suggestions.append("🤝 Highlight collaboration with phrases like 'Collaborated with cross-functional teams', 'Worked closely with product managers', or 'Coordinated with QA teams'")
+            elif group == 'analytical':
+                suggestions.append("🧠 Show analytical skills through 'Analyzed system bottlenecks', 'Debugged complex issues', or 'Optimized database queries resulting in X% improvement'")
+            elif group == 'management':
+                suggestions.append("⏰ Demonstrate management skills with 'Managed project timelines', 'Prioritized feature development', or 'Organized sprint planning sessions'")
+            elif group == 'creativity':
+                suggestions.append("💡 Show creativity and adaptability through 'Designed innovative solutions', 'Adapted to new technologies', or 'Implemented creative workarounds'")
+            elif group == 'business':
+                suggestions.append("📊 Highlight business skills with 'Gathered requirements from stakeholders', 'Analyzed business needs', or 'Ensured attention to detail in code reviews'")
+    
+    return suggestions
+
 def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 10) -> Tuple[float, List[str], List[str]]:
     """
     Calculate enhanced context points based on keyword placement and usage patterns.
@@ -154,6 +218,9 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
         if not found:
             missing.add(kw)
     
+    # Filter missing keywords to only include soft skills
+    missing_soft_skills = {kw for kw in missing if is_soft_skill(kw)}
+    
     # Enhanced scoring with multiple factors
     total_keywords = len(jd_keywords)
     if total_keywords == 0:
@@ -181,14 +248,14 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
     
     # Generate enhanced feedback
     short_feedback, detailed_feedback = generate_enhanced_feedback(
-        found_in_context, found_in_skills, found_in_summary, missing, 
+        found_in_context, found_in_skills, found_in_summary, missing_soft_skills, 
         keyword_frequency, total_keywords
     )
     
     return round(final_score, 1), short_feedback, detailed_feedback
 
 def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[str], 
-                             found_in_summary: Set[str], missing: Set[str], 
+                             found_in_summary: Set[str], missing_soft_skills: Set[str], 
                              keyword_frequency: Dict[str, int], total_keywords: int) -> Tuple[List[str], List[str]]:
     """
     Generate comprehensive feedback based on keyword analysis results.
@@ -233,18 +300,21 @@ def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[
             "Experience or Projects sections to strengthen your application."
         )
     
-    # Missing keywords
-    if missing:
-        missing_sample = sorted(list(missing)[:4])
-        severity = "Critical" if len(missing) / total_keywords > 0.5 else "Important"
+    # Missing soft skills with suggestions
+    if missing_soft_skills:
+        missing_sample = sorted(list(missing_soft_skills)[:4])
         short_feedback.append(
-            f"❌ {severity}: Missing key terms `{', '.join(missing_sample)}` - add them to boost relevance."
+            f"💼 Consider adding soft skills: `{', '.join(missing_sample)}` through specific examples in your experience."
         )
         detailed_feedback.append(
-            f"Missing keywords analysis: Your resume lacks important terms from the job description: "
-            f"`{', '.join(sorted(missing)[:8])}`. Consider incorporating these naturally into relevant "
-            "sections to improve ATS matching and demonstrate alignment with the role requirements."
+            f"Soft skills enhancement: Your resume could benefit from demonstrating these soft skills: "
+            f"`{', '.join(sorted(missing_soft_skills))}`. Rather than listing them, show them through "
+            "specific examples and achievements in your Experience and Projects sections."
         )
+        
+        # Add specific suggestions for soft skills
+        soft_skill_suggestions = get_soft_skill_suggestions(missing_soft_skills)
+        detailed_feedback.extend(soft_skill_suggestions)
     
     # Frequency insights
     high_freq_keywords = [kw for kw, freq in keyword_frequency.items() if freq > 2]

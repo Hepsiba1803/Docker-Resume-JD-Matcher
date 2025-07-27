@@ -260,13 +260,24 @@ function renderResults(results) {
     let suggestionsHTML = "";
     let tooltipHTML = "";
 
+
     // MODIFIED SECTION: Special handling for missingkeywords section
     if (key === "missingkeywords") {
-      // For keyword section, show single suggestion instead of list
+      // For keyword section, show missing keywords first, then suggestion with spacing
+      if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
+        missingHTML = `
+          <div class="suggestions">
+            <strong>Missing Keywords:</strong>
+            <ul>${item.missing_keywords.map(k => `<li>${k}</li>`).join("")}</ul>
+          </div>
+        `;
+      }
+      
       suggestionsHTML = `
-        <div class="suggestions">
+        <div class="suggestions" style="margin-top: 1rem;">
           <strong>Suggestions:</strong>
-          <p>💡 Add these terms somewhere in your resume to improve ATS compatibility.<p>
+          <p style="margin-top: 0.5rem;">💡 Add these terms somewhere in your resume to improve ATS compatibility</p>
+        </div>
       `;
     } else {
       // For all other sections, use the original logic
@@ -283,6 +294,16 @@ function renderResults(results) {
           <div class="suggestions">
             <strong>Suggestions:</strong>
             <p>${suggestionsList}</p>
+          </div>
+        `;
+      }
+      
+      // Handle missing keywords for other sections
+      if (Array.isArray(item.missing_keywords) && item.missing_keywords.length > 0) {
+        missingHTML = `
+          <div class="suggestions">
+            <strong>Missing Keywords:</strong>
+            <ul>${item.missing_keywords.map(k => `<li>${k}</li>`).join("")}</ul>
           </div>
         `;
       }
@@ -303,7 +324,7 @@ function renderResults(results) {
       `;
     }
 
-    card.innerHTML = header + score + suggestionsHTML + tooltipHTML + missingHTML;
+    card.innerHTML = header + score + missingHTML + suggestionsHTML + tooltipHTML;
     resultsContainer.appendChild(card);
   });
 }

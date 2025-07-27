@@ -20,6 +20,16 @@ def compute_keyword_score_and_suggestions(job_description: str, resume_text: str
     points_per_matched_keyword = 5
     matched_keywords = jd_keywords.intersection(resume_keywords)
     missing_keywords = list(jd_keywords.difference(resume_keywords))
+        
+    technical_missing= [kw for kw in missing_keywords if not is_soft_skill(kw)]
     score = min(len(matched_keywords) * points_per_matched_keyword, max_points)
     suggestion = "💡 Add these terms somewhere in your resume to improve ATS compatibility"
-    return score, missing_keywords, suggestion
+    return score, technical_missing, suggestion
+def is_soft_skill(keyword):
+    # Start with the most common ones - you can add more as you discover them
+    soft_skills = {
+        'communication', 'collaboration', 'leadership', 'teamwork', 
+        'problem-solving', 'analytical', 'organizational', 'interpersonal',
+        'time management', 'critical thinking', 'adaptability', 'creativity'
+    }
+    return keyword.lower().strip() in soft_skills
