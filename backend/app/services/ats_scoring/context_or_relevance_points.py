@@ -365,7 +365,7 @@ def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Tuple[f
     """
     sections = split_into_sections(resume_text)
     score, short_feedback, detailed_feedback = enhanced_keyword_context_points(sections, job_keywords)
-     if score == 0:
+    if score == 0:
         # Short version for immediate view
         short_feedback.append("💼 Your experience is valuable - this role focuses on different areas.")
         
