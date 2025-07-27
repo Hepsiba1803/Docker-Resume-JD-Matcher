@@ -265,10 +265,6 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
         keyword_frequency, total_keywords
     )
     
-    # Add zero score message if needed
-    if final_score == 0:
-        detailed_feedback.append("💼 Your professional experience is valuable. This particular role focuses on different areas than your current expertise.")
-    
     return round(final_score, 1), short_feedback, detailed_feedback
 
 def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[str], 
@@ -283,6 +279,22 @@ def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[
     short_feedback = []
     detailed_feedback = []
     
+    # Check if this is a zero score case (no keywords found anywhere)
+    total_found = len(found_in_context) + len(found_in_skills) + len(found_in_summary)
+    is_zero_score = total_found == 0
+    
+    if is_zero_score:
+        # Handle zero score case with single, comprehensive message
+        short_feedback.append("💼 Your experience is valuable - this role focuses on different areas.")
+        detailed_feedback.append(
+            "💼 Your professional experience is valuable. This particular role focuses on "
+            "different areas than your current expertise. Consider targeting roles that "
+            "better align with your background, or if interested in this domain, "
+            "focus on learning the required technologies."
+        )
+        return short_feedback, detailed_feedback
+    
+    # Regular feedback for non-zero scores
     # Excellent context usage
     if found_in_context:
         top_context_keywords = sorted(list(found_in_context)[:3])
@@ -365,16 +377,6 @@ def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Tuple[f
     """
     sections = split_into_sections(resume_text)
     score, short_feedback, detailed_feedback = enhanced_keyword_context_points(sections, job_keywords)
-    if score == 0:
-        # Short version for immediate view
-        short_feedback.append("💼 Your experience is valuable - this role focuses on different areas.")
-        
-        # Long version for detailed view
-        detailed_feedback.append(
-            "💼 Your professional experience is valuable. This particular role focuses on "
-            "different areas than your current expertise. Consider targeting roles that "
-            "better align with your background, or if interested in this domain, "
-            "focus on learning the required technologies."
-        )
     
+    # No additional zero score handling here - it's already handled in generate_enhanced_feedback
     return score, short_feedback, detailed_feedback
