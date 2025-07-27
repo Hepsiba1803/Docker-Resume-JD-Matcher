@@ -150,7 +150,7 @@ def get_soft_skill_suggestions(missing_soft_skills: Set[str]) -> List[str]:
     
     return suggestions
 
-def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 10) -> Tuple[float, List[str], List[str]]:
+def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 40) -> Tuple[float, List[str], List[str]]:
     """
     Calculate enhanced context points based on keyword placement and usage patterns.
     
@@ -218,7 +218,7 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
         if not found:
             missing.add(kw)
     
-    # Filter missing keywords to only include soft skills
+    # Filter missing keywords to only include soft skills for context suggestions
     missing_soft_skills = {kw for kw in missing if is_soft_skill(kw)}
     
     # Enhanced scoring with multiple factors
@@ -231,26 +231,43 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
     summary_ratio = len(found_in_summary) / total_keywords
     skills_ratio = len(found_in_skills) / total_keywords
     
-    # Weighted scoring (context > summary > skills)
-    weighted_score = (0.6 * context_ratio) + (0.25 * summary_ratio) + (0.15 * skills_ratio)
+    # More generous weighted scoring (context > summary > skills)
+    weighted_score = (0.7 * context_ratio) + (0.2 * summary_ratio) + (0.1 * skills_ratio)
+    
+    # Context bonus: reward strong contextual matches
+    if found_in_context and context_ratio >= 0.1:  # At least 10% context match
+        context_bonus = 0.25  # 25% bonus for having meaningful context
+    else:
+        context_bonus = 0
     
     # Frequency bonus: reward repeated usage of important keywords
     avg_frequency = sum(keyword_frequency.values()) / len(keyword_frequency) if keyword_frequency else 0
     frequency_bonus = min(0.1, avg_frequency * 0.02)  # Cap at 10% bonus
     
-    # Coverage penalty: reduce score if too many keywords are missing
+    # Gentler coverage penalty: reduce score if too many keywords are missing
     missing_ratio = len(missing) / total_keywords
-    coverage_penalty = missing_ratio * 0.2  # Up to 20% penalty
+    coverage_penalty = (missing_ratio ** 0.5) * 0.1  # Much gentler penalty (square root + reduced multiplier)
     
-    # Final score calculation
-    final_score = max_points * (weighted_score + frequency_bonus - coverage_penalty)
-    final_score = max(0, min(max_points, final_score))  # Clamp between 0 and max_points
+    # Final score calculation with improved baseline
+    final_score = max_points * (weighted_score + context_bonus + frequency_bonus - coverage_penalty)
+    
+    # Set minimum floor for good matches
+    if found_in_context and context_ratio >= 0.1:  # Has meaningful context matches
+        minimum_score = max_points * 0.2  # At least 20% of max score
+        final_score = max(final_score, minimum_score)
+    
+    # Clamp between 0 and max_points
+    final_score = max(0, min(max_points, final_score))
     
     # Generate enhanced feedback
     short_feedback, detailed_feedback = generate_enhanced_feedback(
         found_in_context, found_in_skills, found_in_summary, missing_soft_skills, 
         keyword_frequency, total_keywords
     )
+    
+    # Add zero score message if needed
+    if final_score == 0:
+        detailed_feedback.append("💼 Your professional experience is valuable. This particular role focuses on different areas than your current expertise.")
     
     return round(final_score, 1), short_feedback, detailed_feedback
 
@@ -324,19 +341,18 @@ def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[
             "throughout your resume, reinforcing your expertise in these areas."
         )
     
-    # Overall coverage assessment
+    # Overall coverage assessment with more generous thresholds
     coverage = (len(found_in_context) + len(found_in_summary) + len(found_in_skills)) / total_keywords
-    if coverage >= 0.8:
+    if coverage >= 0.7:  # Reduced from 0.8
         short_feedback.append("🎯 Excellent keyword coverage - your resume aligns well with the job requirements!")
-    elif coverage >= 0.6:
+    elif coverage >= 0.4:  # Reduced from 0.6
         short_feedback.append("👌 Good keyword coverage - consider adding a few more relevant terms.")
     else:
         short_feedback.append("📈 Keyword coverage needs improvement - focus on incorporating more JD terms.")
     
     return short_feedback, detailed_feedback
 
-# Example usage function
-def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Dict:
+def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Tuple[float, List[str], List[str]]:
     """
     Complete analysis of resume context and keyword alignment.
     
@@ -345,7 +361,7 @@ def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Dict:
         job_keywords (list): Keywords extracted from job description
         
     Returns:
-        dict: Complete analysis results
+        tuple: (score, short_feedback, detailed_feedback)
     """
     sections = split_into_sections(resume_text)
     score, short_feedback, detailed_feedback = enhanced_keyword_context_points(sections, job_keywords)
