@@ -260,22 +260,34 @@ function renderResults(results) {
     let suggestionsHTML = "";
     let tooltipHTML = "";
 
-    const suggestionsList = item.short_suggestions || item.suggestions;
-    if (Array.isArray(suggestionsList) && suggestionsList.length > 0) {
+    // MODIFIED SECTION: Special handling for missingkeywords section
+    if (key === "missingkeywords") {
+      // For keyword section, show single suggestion instead of list
       suggestionsHTML = `
         <div class="suggestions">
           <strong>Suggestions:</strong>
-          <ul>${suggestionsList.map(s => `<li>${s}</li>`).join("")}</ul>
-        </div>
+          <p>💡 Add these terms somewhere in your resume to improve ATS compatibility.<p>
       `;
-    } else if (typeof suggestionsList === 'string') {
-      suggestionsHTML = `
-        <div class="suggestions">
-          <strong>Suggestions:</strong>
-          <p>${suggestionsList}</p>
-        </div>
-      `;
+    } else {
+      // For all other sections, use the original logic
+      const suggestionsList = item.short_suggestions || item.suggestions;
+      if (Array.isArray(suggestionsList) && suggestionsList.length > 0) {
+        suggestionsHTML = `
+          <div class="suggestions">
+            <strong>Suggestions:</strong>
+            <ul>${suggestionsList.map(s => `<li>${s}</li>`).join("")}</ul>
+          </div>
+        `;
+      } else if (typeof suggestionsList === 'string') {
+        suggestionsHTML = `
+          <div class="suggestions">
+            <strong>Suggestions:</strong>
+            <p>${suggestionsList}</p>
+          </div>
+        `;
+      }
     }
+    // END MODIFIED SECTION
 
     if (Array.isArray(item.long_suggestions) && item.long_suggestions.length > 0) {
       const tid = `${sanitizeKey(key)}-tooltip`;
