@@ -2,7 +2,7 @@ import re
 from typing import List, Tuple, Dict, Set
 from collections import Counter
 
-def enhanced_content_quality_score_and_suggestions(resume_text: str, max_points: int = 15) -> Tuple[int, List[str], List[str]]:
+def enhanced_content_quality_score_and_suggestions(resume_text: str, max_points: int = 10) -> Tuple[int, List[str], List[str]]:
     """
     Enhanced scoring of resume content quality based on metrics, verbs, clarity, and structure.
     
