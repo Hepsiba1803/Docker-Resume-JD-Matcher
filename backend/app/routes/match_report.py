@@ -45,7 +45,7 @@ async def create_match_analysis(
 
     overall_score = keyword_score + section_score + content_quality_score + formatting_score + context_score
 
-    overall_feedback = "Resume are considered ATS-friendly if the score is greater than 80"
+    overall_feedback = "Resume are considered ATS-friendly if the score is greater than 80 out of 100"
 
     result ={
         "total":{
