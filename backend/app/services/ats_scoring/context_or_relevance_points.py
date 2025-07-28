@@ -150,7 +150,7 @@ def get_soft_skill_suggestions(missing_soft_skills: Set[str]) -> List[str]:
     
     return suggestions
 
-def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 40) -> Tuple[float, List[str], List[str]]:
+def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 30) -> Tuple[float, List[str], List[str]]:
     """
     Calculate enhanced context points based on keyword placement and usage patterns.
     
