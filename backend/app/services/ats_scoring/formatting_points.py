@@ -12,7 +12,7 @@ def formatting_score_and_suggestions(resume: UploadFile) -> tuple:
         tuple: (score, list of feedback dicts with 'short' and 'long')
     """
     feedback = []
-    max_points = 15
+    max_points = 10
     deductions = 0
     STANDARD_FONTS = {'arial', 'calibri', 'times new roman'}
     DATE_PATTERNS = [
