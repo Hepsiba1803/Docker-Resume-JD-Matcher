@@ -20,6 +20,9 @@ def enhanced_content_quality_score_and_suggestions(resume_text: str, max_points:
     # Track positive findings for better feedback
     positive_findings = []
     
+    # IMPROVED: Base score - everyone starts with some points
+    base_score = 3  # Start with 30% of max points
+    
     # 1. Enhanced Quantified Achievements Detection
     metrics_score, metrics_short, metrics_long, metrics_found = analyze_quantified_achievements(resume_text)
     deductions += metrics_score
@@ -77,20 +80,24 @@ def enhanced_content_quality_score_and_suggestions(resume_text: str, max_points:
         positive_findings.append("professional_tone")
     
     # Generate positive feedback if content is strong
-    if len(positive_findings) >= 3 and not short_feedback:
-        short_feedback.append("✅ Excellent! Content is strong, metrics-driven, and professionally written.")
-        long_feedback.append(
+    if len(positive_findings) >= 3 and len(short_feedback) <= 1:  # Allow minor issues
+        short_feedback.insert(0, "✅ Excellent! Content is strong, metrics-driven, and professionally written.")
+        long_feedback.insert(0,
             "Outstanding content quality! Your resume demonstrates measurable results, uses strong action verbs, "
             "maintains professional tone, and follows good structural practices. This combination makes it highly "
             "compelling to both ATS systems and human recruiters."
         )
     elif len(positive_findings) >= 2:
-        short_feedback.append("👍 Good content quality with room for minor improvements.")
+        short_feedback.insert(0, "👍 Good content quality with room for minor improvements.")
     
-    # Calculate final score
-    final_score = max(max_points - deductions, 0)
+    # IMPROVED: Calculate final score with base + bonus system
+    bonus_points = len(positive_findings)  # Bonus for good practices
+    final_score = base_score + bonus_points - (deductions * 0.8)  # Reduced deduction impact
     
-    return final_score, short_feedback, long_feedback
+    # Ensure score is within bounds
+    final_score = max(0, min(max_points, final_score))
+    
+    return round(final_score), short_feedback, long_feedback
 
 def analyze_quantified_achievements(resume_text: str) -> Tuple[int, List[str], List[str], bool]:
     """
@@ -128,16 +135,17 @@ def analyze_quantified_achievements(resume_text: str) -> Tuple[int, List[str], L
         matches = re.findall(pattern, resume_text, re.IGNORECASE)
         metrics_found.extend(matches)
     
+    # IMPROVED: More generous scoring
     if not metrics_found:
-        return 5, ["❌ Missing metrics like %, $, or numbers to show concrete results."], [
-            "Quantified achievements are crucial for resume impact. Include specific metrics like "
+        return 3, ["⚠️ Add specific metrics like %, $, or numbers to show concrete results."], [
+            "Quantified achievements make your resume more compelling. Consider adding specific metrics like "
             "'increased sales by 25%', 'managed $50K budget', or 'reduced processing time by 3 hours'. "
             "Numbers help recruiters quickly understand the scope and impact of your work."
         ], False
-    elif len(metrics_found) < 3:
-        return 2, ["⚠️ Add more specific metrics to strengthen impact statements."], [
-            "You have some quantified results, but adding more specific metrics throughout your resume "
-            "will significantly strengthen your impact statements and make achievements more compelling."
+    elif len(metrics_found) < 2:  # Reduced from 3
+        return 1, ["💡 Good start! Add a few more specific metrics to strengthen impact."], [
+            "You have some quantified results, which is great! Adding a few more specific metrics throughout "
+            "your resume will make your achievements even more compelling to hiring managers."
         ], True
     else:
         return 0, [], [], True
@@ -194,29 +202,28 @@ def analyze_action_verbs(resume_text: str) -> Tuple[int, List[str], List[str], b
         if re.search(rf'\b{weak_phrase}\b', resume_text, re.IGNORECASE):
             weak_verbs_found.append(weak_phrase)
     
-    # Scoring logic
-    if total_strong_verbs < 3:
-        return 4, [
-            f"❌ Only {total_strong_verbs} strong action verbs found. Use more like 'led', 'developed', 'achieved'."
+    # IMPROVED: More generous scoring logic
+    if total_strong_verbs < 2:  # Reduced from 3
+        return 2, [  # Reduced from 4
+            f"💡 Add more strong action verbs like 'led', 'developed', 'achieved' (found {total_strong_verbs})."
         ], [
-            "Your resume needs more strong action verbs to convey leadership and initiative. "
+            "Your resume would benefit from more strong action verbs to convey leadership and initiative. "
             f"Currently found: {', '.join(verbs_found.keys()) if verbs_found else 'none'}. "
-            "Start bullet points with impactful verbs like 'spearheaded', 'optimized', or 'delivered' "
-            "instead of passive phrases like 'responsible for' or 'worked on'."
+            "Start bullet points with impactful verbs like 'spearheaded', 'optimized', or 'delivered'."
         ], False
-    elif total_strong_verbs < 6:
-        feedback = [f"⚠️ Good start with {total_strong_verbs} strong verbs, but add more variety for impact."]
+    elif total_strong_verbs < 4:  # Reduced from 6
+        feedback = [f"👍 Good use of action verbs ({total_strong_verbs} found)! Consider adding more variety."]
         if weak_verbs_found:
-            feedback.append(f"Replace weak phrases: '{', '.join(weak_verbs_found[:2])}'")
-        return 2, feedback, [
+            feedback.append(f"💡 Try replacing '{weak_verbs_found[0]}' with stronger language.")
+        return 1, feedback, [  # Reduced from 2
             f"You're using some strong action verbs ({', '.join(list(verbs_found.keys())[:5])}), "
-            "but adding more variety and replacing any passive language will significantly improve impact."
+            "which is excellent! Adding more variety will make your impact even clearer."
         ], True
     else:
         if weak_verbs_found:
-            return 1, [f"⚠️ Replace passive phrases like '{weak_verbs_found[0]}' with strong action verbs."], [
-                f"Great use of action verbs! Consider replacing remaining passive phrases "
-                f"like '{', '.join(weak_verbs_found)}' with more dynamic language."
+            return 0, [f"👍 Great action verbs! Small tip: consider replacing '{weak_verbs_found[0]}'."], [
+                f"Excellent use of action verbs! You might consider replacing any remaining passive phrases "
+                f"like '{', '.join(weak_verbs_found[:2])}' for even stronger impact."
             ], True
         return 0, [], [], True
 
@@ -240,11 +247,9 @@ def detect_placeholder_content(resume_text: str) -> Tuple[int, List[str], List[s
         
         # Incomplete entries
         r'tbd|to be determined|coming soon|under construction',
-        r'n/a|not applicable|not available',
         
         # Generic/vague content
         r'\b(example|sample)\s+(project|work|experience)\b',
-        r'various (tasks|duties|responsibilities)',
     ]
     
     placeholders_found = []
@@ -253,12 +258,11 @@ def detect_placeholder_content(resume_text: str) -> Tuple[int, List[str], List[s
         placeholders_found.extend(matches)
     
     if placeholders_found:
-        return 4, [
-            f"❌ Placeholder text detected: '{placeholders_found[0]}' - complete your resume."
+        return 3, [  # Reduced from 4
+            f"⚠️ Complete placeholder text: '{placeholders_found[0]}'"
         ], [
-            f"Your resume contains placeholder or template text: {', '.join(set(placeholders_found)[:3])}. "
-            "This makes the document appear unfinished and unprofessional. Replace all placeholder "
-            "content with your actual information and experiences."
+            f"Your resume contains placeholder or template text: {', '.join(set(placeholders_found)[:2])}. "
+            "Replace this content with your actual information to maintain professionalism."
         ]
     
     return 0, [], []
@@ -274,23 +278,22 @@ def analyze_content_clarity(resume_text: str) -> Tuple[int, List[str], List[str]
     
     # Check for overly long sentences (potential clarity issues)
     sentences = re.split(r'[.!?]+', resume_text)
-    long_sentences = [s for s in sentences if len(s.split()) > 25]
+    long_sentences = [s for s in sentences if len(s.split()) > 30]  # Increased from 25
     
-    if len(long_sentences) > 3:
+    if len(long_sentences) > 5:  # Increased threshold
         issues.append("overly_long_sentences")
     
     # Check for excessive use of jargon or acronyms without context
     words = resume_text.split()
     all_caps_words = [w for w in words if w.isupper() and len(w) > 2 and w.isalpha()]
-    if len(all_caps_words) > 10:  # Too many acronyms might confuse readers
+    if len(all_caps_words) > 15:  # Increased from 10
         issues.append("excessive_acronyms")
     
-    # Check for potential typos or formatting issues
+    # Check for potential formatting issues (more lenient)
     suspicious_patterns = [
-        r'\b\w*[0-9]+[a-zA-Z]+\w*\b',  # Mixed numbers and letters (potential formatting issues)
-        r'\s{3,}',  # Excessive whitespace
-        r'[.]{3,}',  # Multiple periods
-        r'[,]{2,}',  # Multiple commas
+        r'\s{5,}',  # Changed from 3+ to 5+ spaces
+        r'[.]{4,}',  # Changed from 3+ to 4+ periods
+        r'[,]{3,}',  # Changed from 2+ to 3+ commas
     ]
     
     formatting_issues = 0
@@ -298,56 +301,56 @@ def analyze_content_clarity(resume_text: str) -> Tuple[int, List[str], List[str]
         if re.search(pattern, resume_text):
             formatting_issues += 1
     
-    if formatting_issues >= 2:
+    if formatting_issues >= 3:  # Increased threshold
         issues.append("formatting_issues")
     
-    # Check for very short bullet points (might lack detail)
+    # Check for very short bullet points (more lenient)
     bullet_points = re.findall(r'[•·▪▫‣⁃]\s*(.+)', resume_text)
-    if not bullet_points:  # Try alternative bullet patterns
+    if not bullet_points:
         bullet_points = re.findall(r'^\s*[-*]\s*(.+)', resume_text, re.MULTILINE)
     
-    short_bullets = [bp for bp in bullet_points if len(bp.split()) < 5]
-    if len(short_bullets) > len(bullet_points) * 0.3:  # More than 30% are too short
+    short_bullets = [bp for bp in bullet_points if len(bp.split()) < 3]  # Reduced from 5
+    if len(short_bullets) > len(bullet_points) * 0.5:  # Increased from 30% to 50%
         issues.append("short_bullet_points")
     
-    # Calculate deductions based on issues found
+    # IMPROVED: Calculate deductions based on issues found (more lenient)
     total_deductions = 0
     feedback_short = []
     feedback_long = []
     
     if "overly_long_sentences" in issues:
-        total_deductions += 1
-        feedback_short.append("⚠️ Some sentences are too long - break them up for clarity.")
+        total_deductions += 0.5  # Reduced from 1
+        feedback_short.append("💡 Consider shortening very long sentences for clarity.")
         feedback_long.append(
-            "Several sentences exceed 25 words, which can reduce readability. "
-            "Consider breaking longer sentences into shorter, more impactful statements."
+            "Some sentences are quite lengthy. Breaking them into shorter statements "
+            "can improve readability for both ATS systems and human reviewers."
         )
     
     if "excessive_acronyms" in issues:
-        total_deductions += 1
-        feedback_short.append("⚠️ Too many acronyms - spell out important terms first.")
+        total_deductions += 0.5  # Reduced from 1
+        feedback_short.append("💡 Consider spelling out key acronyms on first use.")
         feedback_long.append(
-            "Your resume contains many acronyms or technical terms. While expertise is good, "
-            "ensure key terms are spelled out on first use to avoid confusing non-technical reviewers."
+            "Your resume shows strong technical expertise! To ensure accessibility for all reviewers, "
+            "consider spelling out important acronyms on their first use."
         )
     
     if "formatting_issues" in issues:
-        total_deductions += 2
-        feedback_short.append("❌ Formatting inconsistencies detected - review for errors.")
+        total_deductions += 1  # Reduced from 2
+        feedback_short.append("⚠️ Clean up formatting for professional appearance.")
         feedback_long.append(
-            "Potential formatting issues detected (irregular spacing, mixed formatting, etc.). "
-            "Clean formatting is crucial for ATS systems and professional appearance."
+            "Some formatting inconsistencies were detected. Clean formatting helps with "
+            "both ATS parsing and professional presentation."
         )
     
     if "short_bullet_points" in issues:
-        total_deductions += 1
-        feedback_short.append("⚠️ Several bullet points are too brief - add more detail.")
+        total_deductions += 0.5  # Reduced from 1
+        feedback_short.append("💡 Expand brief bullet points with more detail.")
         feedback_long.append(
-            "Many of your bullet points are quite short and may lack sufficient detail. "
-            "Expand them to better showcase your accomplishments and responsibilities."
+            "Some bullet points could be expanded with more specific details about "
+            "your accomplishments and the impact of your work."
         )
     
-    return total_deductions, feedback_short, feedback_long
+    return round(total_deductions), feedback_short, feedback_long
 
 def analyze_bullet_structure(resume_text: str) -> Tuple[int, List[str], List[str], bool]:
     """
@@ -368,25 +371,25 @@ def analyze_bullet_structure(resume_text: str) -> Tuple[int, List[str], List[str
         bullets = re.findall(pattern, resume_text, re.MULTILINE)
         all_bullets.extend(bullets)
     
-    if len(all_bullets) < 3:
-        return 2, ["⚠️ Use more bullet points to organize achievements clearly."], [
-            "Your resume would benefit from more structured bullet points to organize your "
-            "achievements and responsibilities. Bullet points make content easier to scan and understand."
+    if len(all_bullets) < 2:  # Reduced from 3
+        return 1, ["💡 Use bullet points to organize achievements more clearly."], [  # Reduced from 2
+            "Your resume would benefit from structured bullet points to organize your "
+            "achievements and responsibilities. Bullet points make content easier to scan."
         ], False
     
-    # Analyze bullet point quality
+    # Analyze bullet point quality (more lenient)
     issues = []
     
-    # Check for bullets starting with articles or weak words
+    # Check for bullets starting with weak words
     weak_starters = ["the", "a", "an", "i", "we", "my", "our"]
     weak_bullets = [bp for bp in all_bullets if bp.strip().lower().split()[0] in weak_starters]
     
-    if len(weak_bullets) > len(all_bullets) * 0.3:
+    if len(weak_bullets) > len(all_bullets) * 0.5:  # Increased from 30% to 50%
         issues.append("weak_starters")
     
-    # Check for consistent structure
+    # Check for consistent structure (more lenient)
     action_word_bullets = [bp for bp in all_bullets if re.match(r'^\s*[A-Z][a-z]+(ed|ing|s)?\s', bp)]
-    if len(action_word_bullets) < len(all_bullets) * 0.6:
+    if len(action_word_bullets) < len(all_bullets) * 0.4:  # Reduced from 60% to 40%
         issues.append("inconsistent_structure")
     
     deductions = 0
@@ -394,23 +397,23 @@ def analyze_bullet_structure(resume_text: str) -> Tuple[int, List[str], List[str
     long_feedback = []
     
     if "weak_starters" in issues:
-        deductions += 1
-        short_feedback.append("⚠️ Start bullet points with action verbs, not 'the' or 'a'.")
+        deductions += 0.5  # Reduced from 1
+        short_feedback.append("💡 Start more bullets with action verbs instead of 'the' or 'a'.")
         long_feedback.append(
-            "Many bullet points start with weak words like 'the', 'a', or 'I'. "
-            "Begin with strong action verbs to immediately convey your impact and initiative."
+            "Consider starting more bullet points with strong action verbs to immediately "
+            "convey your impact and achievements."
         )
     
     if "inconsistent_structure" in issues:
-        deductions += 1
-        short_feedback.append("⚠️ Make bullet points more consistent - use parallel structure.")
+        deductions += 0.5  # Reduced from 1
+        short_feedback.append("💡 Try using more consistent bullet point structure.")
         long_feedback.append(
-            "Your bullet points lack consistent structure. Use parallel formatting where "
-            "each bullet starts with an action verb and follows a similar pattern for better readability."
+            "More consistent bullet point structure (parallel formatting) can improve "
+            "readability and professional appearance."
         )
     
-    well_structured = len(issues) == 0 and len(all_bullets) >= 5
-    return deductions, short_feedback, long_feedback, well_structured
+    well_structured = len(issues) == 0 and len(all_bullets) >= 3  # Reduced from 5
+    return round(deductions), short_feedback, long_feedback, well_structured
 
 def analyze_professional_tone(resume_text: str) -> Tuple[int, List[str], List[str], bool]:
     """
@@ -421,13 +424,13 @@ def analyze_professional_tone(resume_text: str) -> Tuple[int, List[str], List[st
     """
     issues = []
     
-    # Check for overly casual language
+    # Check for overly casual language (more specific)
     casual_phrases = [
         r'\bkinda\b|\bsorta\b|\bwanna\b|\bgonna\b',
-        r'\blots of\b|\ba bunch of\b|\ba ton of\b',
-        r'\bawesome\b|\bcool\b|\bsweet\b|\bamazing\b',
-        r'\bguys\b|\bdude\b|\byeah\b|\bokay\b',
-        r'\bstuff\b|\bthings\b|\bretty good\b'
+        r'\ba bunch of\b|\ba ton of\b',
+        r'\bawesome\b|\bsweet\b',  # Removed 'cool' and 'amazing' as they can be contextually appropriate
+        r'\bguys\b|\bdude\b|\byeah\b',
+        r'\bstuff\b(?!\s+like)|\bretty good\b'  # Allow "stuff like" but not standalone "stuff"
     ]
     
     for pattern in casual_phrases:
@@ -435,15 +438,15 @@ def analyze_professional_tone(resume_text: str) -> Tuple[int, List[str], List[st
             issues.append("casual_language")
             break
     
-    # Check for first person pronouns (should be minimal in resumes)
+    # Check for first person pronouns (more lenient)
     first_person = re.findall(r'\b(I|me|my|mine|myself)\b', resume_text, re.IGNORECASE)
-    if len(first_person) > 5:
+    if len(first_person) > 8:  # Increased from 5
         issues.append("excessive_first_person")
     
-    # Check for negative language
+    # Check for negative language (more specific)
     negative_phrases = [
-        r'\bfailed\b|\bmistake\b|\bwrong\b|\bbad\b',
-        r'\bunfortunately\b|\bsadly\b|\bpoor\b|\bterrible\b'
+        r'\bfailed\b|\bmistake\b|\bbad\b',  # Removed 'wrong' as it can be contextual
+        r'\bunfortunately\b|\bterrible\b'  # Removed 'sadly' and 'poor' as they can be contextual
     ]
     
     for pattern in negative_phrases:
@@ -451,56 +454,56 @@ def analyze_professional_tone(resume_text: str) -> Tuple[int, List[str], List[st
             issues.append("negative_language")
             break
     
-    # Check for contractions (should be avoided in formal resumes)
+    # Check for contractions (more lenient)
     contractions = re.findall(r"\b\w+'\w+\b", resume_text)
     common_contractions = ["don't", "won't", "can't", "didn't", "hasn't", "haven't", "isn't", "aren't"]
     formal_contractions = [c for c in contractions if c.lower() in common_contractions]
     
-    if len(formal_contractions) > 2:
+    if len(formal_contractions) > 4:  # Increased from 2
         issues.append("contractions")
     
-    # Calculate deductions and feedback
+    # IMPROVED: Calculate deductions and feedback (more encouraging)
     deductions = 0
     short_feedback = []
     long_feedback = []
     
     if "casual_language" in issues:
-        deductions += 2
-        short_feedback.append("❌ Replace casual language with professional terminology.")
+        deductions += 1  # Reduced from 2
+        short_feedback.append("💡 Consider using more formal language throughout.")
         long_feedback.append(
-            "Your resume contains casual language that may not be appropriate for professional contexts. "
-            "Replace informal phrases with more professional alternatives to maintain credibility."
+            "Some casual expressions were found. Using more formal, professional language "
+            "throughout your resume will strengthen its impact with hiring managers."
         )
     
     if "excessive_first_person" in issues:
-        deductions += 1
-        short_feedback.append("⚠️ Reduce use of 'I', 'me', 'my' - use action verbs instead.")
+        deductions += 0.5  # Reduced from 1
+        short_feedback.append("💡 Reduce first-person pronouns - use action verbs instead.")
         long_feedback.append(
-            "Resumes should minimize first-person pronouns. Instead of 'I managed a team', "
-            "simply write 'Managed team of X people' to create more impactful, concise statements."
+            "Consider reducing first-person pronouns for a more direct, impactful style. "
+            "Instead of 'I managed a team', try 'Managed team of X people'."
         )
     
     if "negative_language" in issues:
-        deductions += 2
-        short_feedback.append("❌ Remove negative language - focus on positive achievements.")
+        deductions += 1  # Reduced from 2
+        short_feedback.append("💡 Focus on positive achievements rather than problems.")
         long_feedback.append(
-            "Avoid negative language in your resume. Focus on positive accomplishments and "
-            "learning experiences rather than failures or problems."
+            "Focus on positive accomplishments and learning experiences to maintain "
+            "an optimistic, forward-looking tone throughout your resume."
         )
     
     if "contractions" in issues:
-        deductions += 1
-        short_feedback.append("⚠️ Avoid contractions - use full words for formal tone.")
+        deductions += 0.5  # Reduced from 1
+        short_feedback.append("💡 Consider avoiding contractions for formal tone.")
         long_feedback.append(
-            "Replace contractions with full words for a more formal, professional tone. "
-            "For example, use 'do not' instead of 'don't' and 'cannot' instead of 'can't'."
+            "Using full words instead of contractions can enhance the professional tone. "
+            "For example, 'do not' instead of 'don't'."
         )
     
-    professional_tone = len(issues) == 0
-    return deductions, short_feedback, long_feedback, professional_tone
+    professional_tone = len(issues) <= 1  # Allow one minor issue
+    return round(deductions), short_feedback, long_feedback, professional_tone
 
 # Example usage function for testing
-def analyze_resume_content_quality(resume_text: str) -> Dict:
+def analyze_resume_content_quality(resume_text: str) -> Tuple[int, List[str], List[str]]:
     """
     Complete content quality analysis of resume.
     
@@ -508,8 +511,6 @@ def analyze_resume_content_quality(resume_text: str) -> Dict:
         resume_text (str): Full resume text
         
     Returns:
-        dict: Complete analysis results
+        tuple: (score, short_feedback, detailed_feedback)
     """
-    score, short_feedback, detailed_feedback = enhanced_content_quality_score_and_suggestions(resume_text)
-    
-    return score, short_feedback, detailed_feedback
+    return enhanced_content_quality_score_and_suggestions(resume_text)
