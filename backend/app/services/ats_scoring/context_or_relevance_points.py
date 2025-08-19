@@ -1,6 +1,166 @@
-def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 30) -> Tuple[float, List[str], List[str]]:
+import re
+from collections import defaultdict
+from typing import Dict, List, Tuple, Set
+
+def split_into_sections(resume_text: str) -> Dict[str, str]:
     """
-    Calculate enhanced context points with more balanced scoring.
+    Split the resume text into sections based on standard section headers.
+    
+    Args:
+        resume_text (str): The resume text to parse
+        
+    Returns:
+        dict: A dictionary with section names as keys and their corresponding text as values
+    """
+    # Enhanced section patterns with more variations
+    section_headers = [
+        r"(?i)^\s*(contact|contact information|contact info|personal details)\s*:?",
+        r"(?i)^\s*(profile|summary|professional summary|about me|objective|career objective)\s*:?",
+        r"(?i)^\s*(education|academic background|educational qualification|academics)\s*:?",
+        r"(?i)^\s*(experience|work experience|professional experience|employment history|career history)\s*:?",
+        r"(?i)^\s*(skills|technical skills|core competencies|key skills|expertise)\s*:?",
+        r"(?i)^\s*(projects|project experience|key projects|notable projects)\s*:?",
+        r"(?i)^\s*(certifications|certificates|credentials|licenses)\s*:?",
+        r"(?i)^\s*(achievements|accomplishments|awards|honors)\s*:?",
+        r"(?i)^\s*(volunteering|volunteer work|community service)\s*:?"
+    ]
+    
+    matches = []
+    for pattern in section_headers:
+        for m in re.finditer(pattern, resume_text, flags=re.MULTILINE):
+            section_name = m.group(1).strip().lower()
+            # Normalize section names for consistency
+            normalized_name = normalize_section_name(section_name)
+            matches.append((m.start(), m.end(), normalized_name))
+    
+    matches.sort(key=lambda x: x[0])
+    
+    if not matches:
+        return {"other": resume_text.strip()}
+    
+    sections = {}
+    for i, (start, end, section_name) in enumerate(matches):
+        content_start = end
+        content_end = matches[i+1][0] if i+1 < len(matches) else len(resume_text)
+        section_content = resume_text[content_start:content_end].strip()
+        
+        # Merge duplicate sections if they exist
+        if section_name in sections:
+            sections[section_name] += "\n" + section_content
+        else:
+            sections[section_name] = section_content
+    
+    return sections
+
+def normalize_section_name(section_name: str) -> str:
+    """
+    Normalize section names to standard categories for consistent processing.
+    
+    Args:
+        section_name (str): Raw section name from resume
+        
+    Returns:
+        str: Normalized section name
+    """
+    section_name = section_name.lower().strip()
+    
+    # Map variations to standard names
+    if any(word in section_name for word in ['contact', 'personal']):
+        return 'contact'
+    elif any(word in section_name for word in ['profile', 'summary', 'about', 'objective']):
+        return 'summary'
+    elif any(word in section_name for word in ['education', 'academic']):
+        return 'education'
+    elif any(word in section_name for word in ['experience', 'employment', 'career', 'work']):
+        return 'experience'
+    elif any(word in section_name for word in ['skill', 'competenc', 'expertise']):
+        return 'skills'
+    elif any(word in section_name for word in ['project']):
+        return 'projects'
+    elif any(word in section_name for word in ['cert', 'credential', 'license']):
+        return 'certifications'
+    elif any(word in section_name for word in ['achievement', 'accomplishment', 'award', 'honor']):
+        return 'achievements'
+    elif any(word in section_name for word in ['volunteer', 'community']):
+        return 'volunteering'
+    else:
+        return section_name
+
+def is_soft_skill(keyword: str) -> bool:
+    """
+    Check if a keyword is a soft skill.
+    
+    Args:
+        keyword (str): The keyword to check
+        
+    Returns:
+        bool: True if it's a soft skill, False otherwise
+    """
+    soft_skills = {
+        'communication', 'collaboration', 'leadership', 'teamwork', 'problem solving',
+        'critical thinking', 'analytical thinking', 'decision making', 'creativity',
+        'innovation', 'adaptability', 'flexibility', 'time management', 'prioritization',
+        'organization', 'attention to detail', 'stakeholder management', 'verbal communication',
+        'written communication', 'presentation', 'public speaking', 'active listening',
+        'conflict resolution', 'negotiation', 'team leadership', 'mentoring', 'coaching',
+        'project management', 'product management', 'business analysis', 'requirements gathering'
+    }
+    return keyword.lower().strip() in soft_skills
+
+def get_soft_skill_suggestions(missing_soft_skills: Set[str]) -> List[str]:
+    """
+    Generate contextual suggestions for soft skills.
+    
+    Args:
+        missing_soft_skills (set): Set of missing soft skills
+        
+    Returns:
+        list: List of suggestions for incorporating soft skills
+    """
+    suggestions = []
+    
+    # Group soft skills by type for better suggestions
+    skill_groups = {
+        'communication': ['communication', 'verbal communication', 'written communication', 'presentation', 'public speaking'],
+        'leadership': ['leadership', 'team leadership', 'mentoring', 'coaching'],
+        'collaboration': ['collaboration', 'teamwork', 'stakeholder management', 'conflict resolution', 'negotiation'],
+        'analytical': ['problem solving', 'critical thinking', 'analytical thinking', 'decision making'],
+        'management': ['time management', 'prioritization', 'organization', 'project management', 'product management'],
+        'creativity': ['creativity', 'innovation', 'adaptability', 'flexibility'],
+        'business': ['business analysis', 'requirements gathering', 'attention to detail']
+    }
+    
+    for group, skills in skill_groups.items():
+        missing_in_group = [skill for skill in missing_soft_skills if skill in skills]
+        if missing_in_group:
+            if group == 'communication':
+                suggestions.append("💬 Demonstrate communication skills through examples like 'Presented technical solutions to stakeholders', 'Documented system architecture', or 'Facilitated cross-team meetings'")
+            elif group == 'leadership':
+                suggestions.append("👥 Show leadership through examples like 'Led a team of X developers', 'Mentored junior developers', or 'Drove technical decisions across teams'")
+            elif group == 'collaboration':
+                suggestions.append("🤝 Highlight collaboration with phrases like 'Collaborated with cross-functional teams', 'Worked closely with product managers', or 'Coordinated with QA teams'")
+            elif group == 'analytical':
+                suggestions.append("🧠 Show analytical skills through 'Analyzed system bottlenecks', 'Debugged complex issues', or 'Optimized database queries resulting in X% improvement'")
+            elif group == 'management':
+                suggestions.append("⏰ Demonstrate management skills with 'Managed project timelines', 'Prioritized feature development', or 'Organized sprint planning sessions'")
+            elif group == 'creativity':
+                suggestions.append("💡 Show creativity and adaptability through 'Designed innovative solutions', 'Adapted to new technologies', or 'Implemented creative workarounds'")
+            elif group == 'business':
+                suggestions.append("📊 Highlight business skills with 'Gathered requirements from stakeholders', 'Analyzed business needs', or 'Ensured attention to detail in code reviews'")
+    
+    return suggestions
+
+def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[str], max_points: int = 30) -> Tuple[int, List[str], List[str]]:
+    """
+    Calculate enhanced context points based on keyword placement and usage patterns.
+    
+    Args:
+        sections (dict): Dictionary of section names and their content
+        jd_keywords (list): List of keywords from the job description
+        max_points (int): Maximum possible points for context scoring
+        
+    Returns:
+        tuple: (score, short_feedback, detailed_feedback)
     """
     
     # Define section categories with different weights
@@ -64,7 +224,7 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
     # Enhanced scoring with multiple factors
     total_keywords = len(jd_keywords)
     if total_keywords == 0:
-        return 0.0, ["No keywords to analyze"], ["No keywords provided for analysis"]
+        return 0, ["No keywords to analyze"], ["No keywords provided for analysis"]
     
     # Calculate base scores
     context_ratio = len(found_in_context) / total_keywords
@@ -86,19 +246,19 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
     else:
         skills_bonus = 0
     
-    # Frequency bonus: reward repeated usage of important keywords
+    # IMPROVED: More generous frequency bonus
     avg_frequency = sum(keyword_frequency.values()) / len(keyword_frequency) if keyword_frequency else 0
     frequency_bonus = min(0.15, avg_frequency * 0.03)  # Increased cap to 15%
     
     # IMPROVED: Much gentler coverage penalty with higher threshold
     missing_ratio = len(missing) / total_keywords
     if missing_ratio > 0.8:  # Only penalize if >80% missing (was any missing)
-        coverage_penalty = (missing_ratio - 0.8) * 0.2  # Gentler penalty
+        coverage_penalty = (missing_ratio - 0.8) * 0.15  # Gentler penalty
     else:
         coverage_penalty = 0
     
     # IMPROVED: Base score floor - everyone gets some points for trying
-    base_floor = 0.15  # 15% base score
+    base_floor = 0.2  # 20% base score
     
     # Final score calculation with improved baseline
     final_score = max_points * (
@@ -116,11 +276,11 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
     
     if found_ratio >= 0.1:  # If at least 10% of keywords found anywhere
         if context_ratio >= 0.05:  # Has some context
-            minimum_score = max_points * 0.35  # At least 35%
+            minimum_score = max_points * 0.4  # At least 40%
         elif summary_ratio >= 0.1 or skills_ratio >= 0.2:  # Good summary or skills coverage
-            minimum_score = max_points * 0.25  # At least 25%
+            minimum_score = max_points * 0.3  # At least 30%
         else:
-            minimum_score = max_points * 0.2   # At least 20%
+            minimum_score = max_points * 0.25  # At least 25%
         
         final_score = max(final_score, minimum_score)
     
@@ -133,14 +293,16 @@ def enhanced_keyword_context_points(sections: Dict[str, str], jd_keywords: List[
         keyword_frequency, total_keywords
     )
     
-    return round(final_score, 1), short_feedback, detailed_feedback
-
+    return round(final_score), short_feedback, detailed_feedback
 
 def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[str], 
                              found_in_summary: Set[str], missing_soft_skills: Set[str], 
                              keyword_frequency: Dict[str, int], total_keywords: int) -> Tuple[List[str], List[str]]:
     """
-    Generate more encouraging and constructive feedback.
+    Generate comprehensive feedback based on keyword analysis results.
+    
+    Returns:
+        tuple: (short_feedback, detailed_feedback)
     """
     short_feedback = []
     detailed_feedback = []
@@ -211,7 +373,7 @@ def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[
     if missing_soft_skills and coverage >= 0.1:
         missing_sample = sorted(list(missing_soft_skills)[:3])  # Show fewer to be less overwhelming
         short_feedback.append(
-            f"💼 Consider showcasing soft skills like `{', '.join(missing_sample)}` through your achievements."
+            f"💼 Consider showcasing soft skills like `{missing_sample[0]}` through your achievements."
         )
         
         # Add specific suggestions for soft skills
@@ -228,3 +390,20 @@ def generate_enhanced_feedback(found_in_context: Set[str], found_in_skills: Set[
         )
     
     return short_feedback, detailed_feedback
+
+def analyze_resume_context(resume_text: str, job_keywords: List[str]) -> Tuple[int, List[str], List[str]]:
+    """
+    Complete analysis of resume context and keyword alignment.
+    
+    Args:
+        resume_text (str): Full resume text
+        job_keywords (list): Keywords extracted from job description
+        
+    Returns:
+        tuple: (score, short_feedback, detailed_feedback)
+    """
+    sections = split_into_sections(resume_text)
+    score, short_feedback, detailed_feedback = enhanced_keyword_context_points(sections, job_keywords)
+    
+    # No additional zero score handling here - it's already handled in generate_enhanced_feedback
+    return score, short_feedback, detailed_feedback
